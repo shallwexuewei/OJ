@@ -1,51 +1,30 @@
 public class Solution {
+    
     public boolean isIsomorphic(String s, String t) {
-        int[] cs = character2num(s);
-        int[] ct = character2num(t);
+        HashMap<Character,Character> s2t = new HashMap<Character,Character>();
+        HashMap<Character,Character> t2s = new HashMap<Character,Character>();
         
-        HashMap<Integer, Integer> num2cnt = new HashMap<Integer, Integer>();
-        for(int i = 0; i < 52; i++) {
-            if(cs[i] != 0){
-                if(num2cnt.containsKey(cs[i])){
-                    num2cnt.put(cs[i], num2cnt.get(cs[i]) + 1);
-                } else {
-                    num2cnt.put(cs[i], 1);
-                }
-            }
-        }
-        
-        for(int i = 0; i < 52; i++) {
-            if(ct[i] != 0){
-                if(num2cnt.containsKey(ct[i])){
-                    if(num2cnt.get(ct[i]) == 1) {
-                        num2cnt.remove(ct[i]);
-                    } else{
-                        num2cnt.put(ct[i], num2cnt.get(ct[i])-1);
-                    }
-                    
-                }else {
-                    return false;
-                }
-            }
-        }
-        if(num2cnt.isEmpty()){
-            return true;
-        } else {
+        int len = s.length();
+        if(t.length() != len) {
             return false;
         }
+        
+        for(int i = 0; i < len; i++) {
+            if(!s2t.containsKey(s.charAt(i))){
+                s2t.put(s.charAt(i), t.charAt(i));
+            } else if(s2t.get(s.charAt(i)) != t.charAt(i)){
+                return false;
+            }
+            
+            
+            if(!t2s.containsKey(t.charAt(i))){
+                t2s.put(t.charAt(i), s.charAt(i));
+            } else if(t2s.get(t.charAt(i)) != s.charAt(i)){
+                return false;
+            }
+            
+        }
+        return true;
     }
     
-    public int[] character2num(String s) {
-        int[] c = new int[52];
-        for(int i = 0; i < s.length(); i++) {
-            if(s.charAt(i) <= 'z' && s.charAt(i) >= 'a'){
-                c[s.charAt(i) - 'a']++;
-            }
-            if(s.charAt(i) <= 'Z' && s.charAt(i) >= 'A'){
-                c[s.charAt(i) - 'A']++;
-            }
-        }
-        return c;
-        
-    }
 }
