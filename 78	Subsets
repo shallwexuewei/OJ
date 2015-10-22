@@ -1,0 +1,23 @@
+public class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        int len = nums.length;
+        int ansLen = 1 << len;
+        
+        Arrays.sort(nums);
+        
+        List<List<Integer>> ans =  new ArrayList<List<Integer>>(ansLen);
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        ans.add(list);
+        
+        for(int i = 0; i < len; i++) {
+            int soFarLen = ans.size();
+            for(int j = 0; j < soFarLen; j++) {
+                ArrayList<Integer> temp = new ArrayList<Integer>();
+                temp.addAll(ans.get(j));
+                temp.add(nums[i]);
+                ans.add(temp);
+            }
+        }
+        return ans;
+    }
+}
