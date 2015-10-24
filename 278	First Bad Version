@@ -1,0 +1,22 @@
+/* The isBadVersion API is defined in the parent class VersionControl.
+      boolean isBadVersion(int version); */
+
+public class Solution extends VersionControl {
+    public int firstBadVersion(int n) {
+        int low = 1;
+        int high = n;
+        while(low <= high) {
+            int mid = low + (high - low)/2;
+            if(isBadVersion(mid)) {
+                // o o o o x x mid_x x
+                // o o o o mid_x x x x
+                high = mid - 1;
+            } else {
+                // o o mid_o o x x x
+                // o o o mid_o x x x
+                low = mid + 1;
+            }
+        }
+        return low;
+    }
+}
