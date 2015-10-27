@@ -1,0 +1,72 @@
+public class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        // find target
+        int low = 0;
+        int high = nums.length - 1;
+        int mid = 0;
+        while( low <= high ) {
+            mid = (high - low)/2 + low;
+            if(nums[mid] == target) {
+                break;
+            } else if (nums[mid] > target) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        
+        int[] result = new int[2];
+        if(nums[mid] != target) {
+            result[0] = -1;
+            result[1] = -1;
+            return result;
+        }
+        
+        // find range
+        if(nums[low] == target) {
+            result[0] = low;
+        } else {
+            int start = low;
+            int end = mid - 1; // >= 0 because nums[low] != target and nums[mid] = target,  mid > low >= 0 
+            if(nums[end] != target) {
+                result[0] = mid;
+            }
+            else {
+                int mid2 = 0;
+                while(start <= end) {
+                    mid2 = (end - start)/2 + start;
+                    if(nums[mid2] == target) {
+                        end = mid2 - 1;
+                    } else {
+                        // only < target
+                        start = mid2 + 1;
+                    }
+                }
+                result[0] = start;
+            }
+        }
+        
+        if(nums[high] == target) {
+            result[1] = high;
+        } else {
+            int start = mid + 1;
+            int end = high;
+            if(nums[start] != target) {
+                result[1] = mid;
+            } else {
+                int mid2 = 0;
+                while(start <= end) {
+                    mid2 = (end - start)/2 + start;
+                    if(nums[mid2] == target) {
+                        start = mid2 + 1;
+                    } else {
+                        // only > target
+                        end = mid2 - 1;
+                    }
+                }
+                result[1] = end;
+            }
+        }
+        return result;
+    }
+}
