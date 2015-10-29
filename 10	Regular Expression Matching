@@ -1,0 +1,39 @@
+public class Solution {
+    public boolean isMatch(String s, String p) {
+        return isMatch(s, p, 0, 0);
+    }
+    
+    public boolean isMatch(String s, String p, int startS, int startP) {
+        int lenS = s.length() - startS;
+        int lenP = p.length() - startP;
+        
+        if(lenP == 0) {
+            return (lenS == 0);
+        } 
+        
+        if(lenP == 1 || p.charAt(startP + 1) != '*'){
+            if(lenS == 0) {
+                return false;
+            }
+            if(s.charAt(startS) != p.charAt(startP) && p.charAt(startP) != '.' ) {
+                return false;
+            }
+            return isMatch(s, p, startS + 1, startP + 1);
+        } else {
+            // lenP > 1 && p.charAt(startP + 1) == '*'
+            if(isMatch(s, p, startS, startP + 2)) {
+                // * matches empty string
+                return true;
+            } 
+            for(int newStart = startS;
+            newStart<s.length() && ( (s.charAt(newStart) == p.charAt(startP)) || (p.charAt(startP) == '.') );
+            newStart++
+            ) {
+                if(isMatch(s, p, newStart + 1, startP + 2)){
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+}
