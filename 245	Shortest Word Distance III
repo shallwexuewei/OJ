@@ -1,0 +1,34 @@
+public class Solution {
+    public int shortestWordDistance(String[] words, String word1, String word2) {
+        int pos1 = -1;
+        int pos2 = -1;
+        boolean sameWord = false;
+        int minLen = Integer.MAX_VALUE;
+        if(word1.equals(word2)){
+            for(int i = 0; i < words.length; i++) {
+                if(words[i].equals(word1)){
+                    if(pos1 != -1) {
+                        minLen = Math.min(minLen, i - pos1);
+                    }
+                    pos1 = i;
+                }
+            }
+        } else {
+            for(int i = 0; i < words.length; i++) {
+                if(words[i].equals(word1)){
+                    pos1 = i;
+                    if(pos2 != -1 && minLen > (i-pos2)) {
+                        minLen = i - pos2;
+                    }
+                } else if(words[i].equals(word2)){
+                    pos2 = i;
+                    if(pos1 != -1 && minLen > (i - pos1)){
+                        minLen = i - pos1;
+                    }
+                }
+            }
+        }
+        
+        return minLen;
+    }
+}
