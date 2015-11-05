@@ -1,0 +1,95 @@
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
+
+public class Solution {
+    public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
+        // null 
+        
+        int len;
+        
+        // BFS
+        LinkedList<String> q = new LinkedList<String>();
+        LinkedList<Integer> lenQ = new LinkedList<Integer>();
+        // visit state
+        HashSet<String> visitedSet = new HashSet<String>();
+        // wildcardMap
+        HashMap<String, LinkedList<String>> wildcardMap = getWildcardMap(wordList);
+        
+        if(beginWord.equals(endWord)) {
+            return 0;
+        }
+        
+        q.add(beginWord);
+        lenQ.add(1);
+        while(!q.isEmpty()) {
+            String current = q.removeFirst();
+            int nextLen = lenQ.removeFirst() + 1;
+            LinkedList<String> wildcardList = getWildcardList(current);
+            for(String wildcardWord:wildcardList) {
+                LinkedList<String> neighbors = wildcardMap.get(wildcardWord);
+                for(String neighbor:neighbors) {
+                    if(!neighbor.equals(current)) {
+                        if(!visitedSet.contains(neighbor)) {
+                            if(neighbor.equals(endWord)){
+                                return nextLen;
+                            } 
+                            q.add(neighbor);
+                            lenQ.add(nextLen);
+                            visitedSet.add(neighbor);
+                        }
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+    
+    // get wildcardList
+    private LinkedList<String> getWildcardList(String word) { // O(K)
+        LinkedList<String> list = new LinkedList<String>();
+        for(int i = 0; i < word.length(); i++) {
+            list.add(word.substring(0, i) + "_" + word.substring(i+1));
+        }
+        return list;
+    }
+    
+    // make wildcardMap
+    private HashMap<String, LinkedList<String>> getWildcardMap(Set<String> wordList) { // O(KN)
+        HashMap<String, LinkedList<String>> wildcardMap = new HashMap<String, LinkedList<String>>();
+        for(String word:wordList) {
+            for(int i = 0; i < word.length(); i++) {
+                String wildcardWord = word.substring(0, i) + "_" + word.substring(i+1);
+                if(wildcardMap.containsKey(wildcardWord)) {
+                    wildcardMap.get(wildcardWord).add(word);
+                } else {
+                    LinkedList<String> realWords = new LinkedList<String>();
+                    realWords.add(word);
+                    wildcardMap.put(wildcardWord, realWords);
+                }
+            }
+        }
+        return wildcardMap;
+    }
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Solution s = new Solution();
+//		"a"
+//		"c"
+//		["a","b","c"]
+		String beginWord = "a";
+		String endWord = "c";
+		String[] words = {"a", "b", "c"};
+		Set<String> wordList = new HashSet<String>();
+		for(String word:words) {
+			wordList.add(word);
+		}
+		System.out.println(s.ladderLength( beginWord,  endWord,  wordList));
+	}
+
+}
