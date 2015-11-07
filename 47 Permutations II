@@ -1,0 +1,53 @@
+public class Solution {
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        
+        // 1
+        // 1 1
+        // insert 2 to index 0, 1, 2
+        // 2 1 1, 1 2 1, 1 1 2
+        
+        // 1 1 2 3 3
+        // 2 1 1, 1 2 1, 1 1 2
+        // insert 3, 3:
+        // 3 3 2 1 1, 3 2 3 1 1, 3 2 1 3 1, 3 2 1 1 3, 
+        // 2 3 3 1 1, 2 3 1 3 1, 2 3 1 1 3
+        // 2 1 3 3 1, 2 1 3 1 3
+        // 2 1 1 3 3
+        // 3 3 1 2 1, 3 1 3 2 1, 3 1 2 3 1, 3 1 2 1 3,
+        // 1 3 3 2 1, 1 3 2 3 1, 1 3 2 1 3
+        // 1 2 3 3 1, 1 2 3 1 3
+        // 1 2 1 3 3
+        // 3 3 1 1 2, 3 1 3 1 2, 3 1 1 3 2, 3 1 1 2 3
+        // 1 3 3 1 2, ...
+        
+        HashMap<Integer, Integer> num2cnt = new HashMap<Integer, Integer>();
+        for(int num:nums){
+            if(num2cnt.containsKey(num) ){
+                num2cnt.put(num, num2cnt.get(num) + 1);
+            } else {
+                num2cnt.put(num, 1);
+            }
+        }
+        
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        for(int num:num2cnt.keySet()){
+            int cnt = num2cnt.get(num);
+            if(result.isEmpty()){
+                ArrayList<Integer> list = new ArrayList<Integer>();
+                for(int i = 0; i < cnt; i++){
+                    list.add(num);
+                }
+                result.add(list);
+                continue;
+            }
+            
+            // result is not empty
+            for(ArrayList<Integer> list:result) {
+                for(int i = 0; i < cnt; i++) {
+                    ArrayList<Integer> newList = new ArrayList<Integer>(list);
+                    
+                }
+            }
+        }
+    }
+}
