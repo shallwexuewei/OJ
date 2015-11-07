@@ -1,5 +1,9 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class Solution {
-    public List<List<Integer>> permuteUnique(int[] nums) {
+	public List<List<Integer>> permuteUnique(int[] nums) {
         
         // 1
         // 1 1
@@ -30,24 +34,32 @@ public class Solution {
         }
         
         List<List<Integer>> result = new ArrayList<List<Integer>>();
-        for(int num:num2cnt.keySet()){
-            int cnt = num2cnt.get(num);
-            if(result.isEmpty()){
-                ArrayList<Integer> list = new ArrayList<Integer>();
-                for(int i = 0; i < cnt; i++){
-                    list.add(num);
-                }
-                result.add(list);
-                continue;
-            }
-            
-            // result is not empty
-            for(ArrayList<Integer> list:result) {
-                for(int i = 0; i < cnt; i++) {
-                    ArrayList<Integer> newList = new ArrayList<Integer>(list);
-                    
-                }
-            }
-        }
+        
+        permute(num2cnt, new ArrayList<Integer>(), nums.length, result);
+        return result;
     }
+
+	private void permute(HashMap<Integer, Integer> num2cnt,
+			ArrayList<Integer> prefix, int remaining, List<List<Integer>> result) {
+		/* Base case. */
+		if (remaining == 0) {
+			result.add(prefix);
+			return;
+		}
+
+		/*
+		 * try remining numbers for next number, and generate remaining
+		 * permutations
+		 */
+		for (int num : num2cnt.keySet()) {
+			int cnt = num2cnt.get(num);
+			ArrayList<Integer> newPrefix = new ArrayList<Integer>(prefix);
+			newPrefix.add(num);
+			if (cnt > 0) {
+				num2cnt.put(num, cnt - 1);
+				permute(num2cnt, newPrefix, remaining - 1, result);
+				num2cnt.put(num, cnt);
+			} 
+		}
+	}
 }
