@@ -3,29 +3,27 @@ public class Solution {
         // if(nums == null)
         
         int len = nums.length;
-        List<List<Integer>> current = new ArrayList<List<Integer>>();
-        List<List<Integer>> next = new ArrayList<List<Integer>>();
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
         if(len == 0) {
-            return current;    
+            return result;    
         }
         ArrayList<Integer> firstList = new ArrayList<Integer>();
         firstList.add(nums[0]);
-        current.add(firstList);
+        result.add(firstList);
         for(int i = 1; i < len; i++) {
-            for(List<Integer> list:current) {
+            List<List<Integer>> current = new ArrayList<List<Integer>>();
+            for(List<Integer> list:result) {
                 for(int j = 0; j <= list.size(); j++){
                     ArrayList<Integer> newList = new ArrayList<Integer>();
                     newList.addAll(list);
                     newList.add(j, nums[i]);
-                    next.add(newList);
+                    current.add(newList);
                 }
             }
-            current.clear();
-            current.addAll(next);
-            next.clear();
+            result = new ArrayList<List<Integer>>(current); 
         }
         
-        return current;
+        return result;
         
     }
      
