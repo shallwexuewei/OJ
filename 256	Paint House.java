@@ -1,16 +1,19 @@
 public class Solution {
+    private int globalMin;
+    
     public int minCost(int[][] costs) {
         if(costs == null) {
             return 0;
         }
         
         // depth first search
-        int min = Integer.MAX_VALUE;
+        globalMin = Integer.MAX_VALUE;
         int last = costs.length - 1;
         
         if(last < 0) {
             return 0;
         }
+         
         
         return minCost(costs, 0, last, 0);
     }
@@ -22,7 +25,9 @@ public class Solution {
             for(int i = 1; i < costs[last].length; i++) {
                 min = Math.min(min, costs[last][i]);
             }
-            return soFarCost + min;
+            soFarCost += min;
+            globalMin = Math.min(globalMin, soFarCost);
+            return soFarCost;
         }
         
         int min = minCost(costs, current + 1, last, soFarCost + costs[current][0]);
