@@ -1,0 +1,96 @@
+public class Solution {
+    public boolean isMatch(String s, String p) {
+        // use index to get the tail of s and p
+        return isMatch(s, p, 0, 0);
+        
+    }
+    
+    private boolean isMatch(String s, String p, int iS, int iP) {
+        int lenS = s.length();
+        int lenP = p.length();
+        int lastS = lenS - 1;
+        int lastP = lenP - 1;
+        int lenSubS = lenS - iS;
+        int lenSubP = lenP - iP;
+        
+        // base case
+        if(lenSubS == 0) {
+            if(lenSubP == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if(lenSubP == 0) {
+            return false;
+        }
+        
+        /* from now on, iS < lenS, iP < lenP */ 
+        if(lenSubP == 1 ) {
+            if(s.charAt(iS) != p.charAt(iP) && p.charAt(iP) != '?' ) {
+                return false;
+            } else {
+                return isMatch(s, p, iS + 1, iP + 1);
+            }
+        } 
+        /* from now on, iS < lenS, lenSubP == 0 */
+        else if(lenSubP > 1 && p.charAt(iP + 1) != '*') {
+            if(s.charAt(iS) != p.charAt(iP) && p.charAt(iP) != '?' ) {
+                return false;
+            } else {
+                return isMatch(s, p, iS + 1, iP + 1);
+            }
+        }
+        /* lenSubP > 1 && p.charAt(iP + 1) == '*' */
+        else {
+            // match empty string:
+            if(isMatch(s, p, iS, iP + 2)){
+                return true;
+            }
+            // match sequence
+            int i = iS;
+            while(i < lenS) {
+                if(s.charAt(iS) != p.charAt(iP) && p.charAt(iP) != '?' ) {
+                    return false;
+                } else {
+                    // match [iS, i]
+                    if(isMatch(s, p, i + 1, iP + 2)){
+                        return true;
+                    }
+                }
+                i++;
+            }
+            return false;
+        }
+    }
+}
+
+/*
+test case 3:
+"bababababababaaaababbabbbbabbbaabbbabaaaaaababbbababbbaaaaabbaaabbaabaababbbaaaaaabbbbabbabaababaabbabababaaaaaaabbbababbbbbabaabbbababbbbabbabbabaaaaaaabbabababaaaabaaaabbabaaaababbabaabbaaabbaabaabaabaa"
+"a*bab*******b*******babb*ba*aa*a*aa***bbbaa***b**aaaabb**bb*ba*aa***bb**baba********a***b*b*a**a******ba"
+Time Limit Exceeded 
+
+
+test case 2:
+"aa"
+"a*"
+iS = 0;
+iP = 0
+lenSubS = 2
+lenSubP = 2
+line36 -> line40 isMatch(s, p, 1, 1)
+lenSubS = 1
+lenSubP = 1
+
+test case 1:
+"aa"
+"a"
+
+lenS = 2
+lenP = 1
+lastS = 1
+lastP = 0
+iS = 0
+iP = 0
+
+*/
