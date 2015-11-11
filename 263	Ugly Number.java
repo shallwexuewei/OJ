@@ -8,23 +8,23 @@ public class Solution {
         // base case;
         if(num == 1) {
             return true;
+        }  
+        
+        while(num%2 == 0) {
+            num/=2;
         }
-        int[] memo = new int[num];
-        Arrays.fill(memo, -1);
-        int[] factors = {2, 3, 5};
-        return isUgly(num, memo, factors);
-    }
-    
-    private boolean isUgly(int num, int[] memo, int[] factors){
-        for(int i: factors) {
-            if(num%i == 0) {
-                if(isUgly(num/i)){
-                    return true;
-                }
-            }
+        while(num%3 == 0) {
+            num/=3;
+        }
+        while(num%5 == 0) {
+            num/=5;
+        }
+        if(num == 1) {
+            return true;
         }
         return false;
     }
+     
 }
 
 /*
