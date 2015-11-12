@@ -45,6 +45,8 @@ Output:
 [false,true,true,true]
 Expected:
 [false,false,true,true]
+
+https://leetcode.com/discuss/67042/why-this-test-case-expects-return-true
 */
 
 
