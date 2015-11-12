@@ -1,11 +1,31 @@
 public class ValidWordAbbr {
-    HashMap<String, String> abbr2word;
+    // solution 1
+    // HashMap<String, List<String>> space: O(K)*O(N) given K the size of abbr number and N the average size of word list
+    
+    // solution 2
+    // HashMap<String, Boolean> space: O(K)
+    // + HashSet<String> space: O(K) given K the size of abbr number
+    
+    HashMap<String, Boolean> abbr2unique;
+    HashSet<String> wordSet;
     
 
     public ValidWordAbbr(String[] dictionary) {
-        abbr2word = new HashMap<String, String>();
+        abbr2unique = new HashMap<String, Boolean>(); 
+        wordSet = new HashSet<String>();
         for(String s:dictionary) {
-            abbr2word.put(abbreviate(s), s);
+            String abbr = abbreviate(s);
+            if(abbr2unique.containsKey(abbr)){
+                if(abbr2unique.get(abbr)){
+                    // if not the original word
+                    if(!wordSet.contains(s)){
+                        abbr2unique.put(abbr, false); 
+                    }
+                }
+            } else {
+                abbr2unique.put(abbr, true);
+                wordSet.add(s);
+            } 
         }
     }
     
@@ -24,11 +44,14 @@ public class ValidWordAbbr {
 
     public boolean isUnique(String word) { 
         String abbr = abbreviate(word);
-        if(abbr2word.containsKey(abbr)){
-            if(!abbr2word.get(abbr).equals(word)){
+        if(abbr2unique.containsKey(abbr)){
+            boolean unique = abbr2unique.get(abbr);
+            if(unique) {
+                return wordSet.contains(word);
+            } else {
                 return false;
-            }
-        }
+            } 
+        } 
         return true;
     }
 }
@@ -46,7 +69,16 @@ Output:
 Expected:
 [false,false,true,true]
 
-https://leetcode.com/discuss/67042/why-this-test-case-expects-return-true
+
+换成
+    // solution 2
+    // HashMap<String, Boolean> space: O(K)
+    // + HashSet<String> space: O(K) given K the size of abbr number
+也是解决不了：
+Input:["a","a"],isUnique("a")
+Output:[false]
+Expected:[true]
+
 */
 
 
