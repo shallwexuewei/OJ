@@ -1,0 +1,47 @@
+public class Solution {
+    public List<String> findStrobogrammatic(int n) {
+        List<String> result = new LinkedList<String>();
+        if(n == 0) {
+            return result;
+        }
+        
+        /*
+        9 6
+        8 8 
+        6 9
+        1 1
+        0 0
+        */
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        map.put(9, 6);
+        map.put(8, 8);
+        map.put(6, 9);
+        map.put(1, 1);
+        map.put(0, 0);
+        
+        makeStrobogrammatic("", map, "", 0, n-1, result);
+        return result;
+    }
+    
+    public void makeStrobogrammatic(String prefix, HashMap<Integer, Integer> map, String profix, int i, int j, List<String> result) {
+        // base case:
+        if(i > j) {
+            result.add(prefix + profix);
+            return;
+        } else if(i == j) {
+            for(Integer key:map.keySet()){
+                if(key == map.get(key)){
+                    result.add(prefix + key + profix);
+                }
+            }
+            return;
+        }
+        
+        for(Integer key:map.keySet()){
+            if(i == 0 && key == 0) {
+                continue;
+            }
+            makeStrobogrammatic(prefix + key, map, map.get(key) + profix, i+1, j-1, result);
+        }
+    }
+}
