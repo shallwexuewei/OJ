@@ -1,0 +1,53 @@
+public class Solution {
+    public boolean isStrobogrammatic(String num) {
+        if(num == null) {
+            return false;
+        } 
+        int len = num.length();
+        if(len == 0) {
+            return false;
+        }
+        
+        /*
+        9 6
+        8 8 
+        6 9
+        5 5
+        1 1
+        0 0
+        */
+        char[] map = new char[10];
+        Arrays.fill(map, -1);
+        map['9'] = '6';
+        map['8'] = '8';
+        map['6'] = '9';
+        map['5'] = '5';
+        map['1'] = '1';
+        map['0'] = '0';
+        
+        /*
+        double pointer to traverse
+        */
+        /* 
+        no linked list!!! Why do you want to use double pointer?!!!
+        it's array of chars!!! We could use index!!!
+        int fast = 0;
+        int slow = 0;
+        int len = num.length();
+        while(fast + 2 < len) {
+            slow++;
+            fast += 2;
+        }
+        */
+        int i = 0;
+        int j = len - 1;
+        while(i < j) {
+            if(map[num.charAt(i)] != num.charAt(j)){
+                return false;
+            }
+        }
+        return true;
+        
+        
+    }
+}
