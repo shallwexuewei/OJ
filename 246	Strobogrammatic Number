@@ -1,13 +1,5 @@
 public class Solution {
     public boolean isStrobogrammatic(String num) {
-        if(num == null) {
-            return false;
-        } 
-        int len = num.length();
-        if(len == 0) {
-            return false;
-        }
-        
         /*
         9 6
         8 8 
@@ -16,14 +8,14 @@ public class Solution {
         1 1
         0 0
         */
-        char[] map = new char[10];
+        int[] map = new int[10];
         Arrays.fill(map, -1);
-        map['9'] = '6';
-        map['8'] = '8';
-        map['6'] = '9';
-        map['5'] = '5';
-        map['1'] = '1';
-        map['0'] = '0';
+        map[9] = 6;
+        map[8] = 8;
+        map[6] = 9;
+        map[5] = 5;
+        map[1] = 1;
+        map[0] = 0;
         
         /*
         double pointer to traverse
@@ -39,15 +31,32 @@ public class Solution {
             fast += 2;
         }
         */
+        int len = num.length();
         int i = 0;
         int j = len - 1;
         while(i < j) {
-            if(map[num.charAt(i)] != num.charAt(j)){
+            int ni = num.charAt(i) - '0';
+            int nj = num.charAt(j) - '0';
+            if(map[ni] != nj) {
                 return false;
             }
+            i++;
+            j--;
         }
         return true;
         
-        
     }
 }
+
+/*
+Input:
+"11"
+Tile Limit Exceeds
+
+Input:
+"2"
+Output:
+true
+Expected:
+false
+*/
