@@ -1,0 +1,45 @@
+public class Solution {
+    public int numWays(int n, int k) {
+        // DFS + memos(2D)
+        int[][][] memos = new int[2][][];
+        memos[0] = new int[n][];
+        memos[1] = new int[n][];
+        for(int i = 0; i < n; i++){
+            memos[0][i] = new int[k];
+            Arrays.fill(memos[0][i], -1);
+            memos[1][i] = new int[k];
+            Arrays.fill(memos[1][i], -1);
+        }
+        return numWays(n, k, false, memos, -1, 0);
+    }
+    
+    private int numWays(int n, int k, boolean haveSame, int[][][] memos, int prev, int iPost) {
+        // base case:
+        if(iPost == n) {
+            return 0;
+        }
+        
+        int num = 0;
+                int flag = haveSame?1:0;
+        for(int i = 0; i < k; i++) {
+            if(prev == i) {
+                if(!haveSame) {
+                    if(memos[1][iPost+1][i] != -1) {
+                        num += memos[1][iPost+1][i];
+                    } else {
+                        num += numWays(n, k, true, memos, i, iPost+1); 
+                    }
+                }
+            } else {
+                // prev != i
+                if(memos[flag][iPost+1][i] != -1) {
+                    num += memos[flag][iPost+1][i];
+                } else {
+                    num += numWays(n, k, true, memos, i, iPost+1);
+                }
+            }
+        }
+        memos[flag][iPost][prev] = num;
+        return num;
+    }
+}
