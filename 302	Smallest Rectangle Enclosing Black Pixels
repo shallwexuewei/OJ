@@ -1,0 +1,45 @@
+public class Solution {
+    public int minArea(char[][] image, int x, int y) {
+        int rows = image.length;
+        if(rows == 0) {
+            return 0;
+        }
+        int cols = image[0].length;
+        if(cols == 0) {
+            return 0;
+        }
+        
+        // 0,   1,   2,      3
+        // left, up, right, down
+        int left = cols;
+        int right = 0;
+        int down = 0;
+        int up = rows;
+        
+        int[][] m = new int[rows][];
+        for(int r = 0; r < rows; r++) {
+            //m[i] = new int[cols];
+            for(int c = 0; c < cols; c++) {
+                if(image[r][c] == '0') {
+                    //m[r][c] = 0;
+                } else {
+                    if(left > c) {
+                        left = c;
+                    } 
+                    if(right < c) {
+                        right = c;
+                    }
+                    if(down < r) {
+                        down = r;
+                    }
+                    if(up > r) {
+                        up = r;
+                    }
+                    //m[r][c] = 1;
+                }
+            }
+        }
+        
+        return (right - left + 1) * (down - up + 1);
+    }
+}
