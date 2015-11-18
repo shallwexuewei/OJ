@@ -29,7 +29,7 @@ public class Solution {
         int i = high; // left of target
         int j = low; // right of target
         int last = -1;
-        if(result.size() < k && i > -1 && j < all.size()){
+        while(result.size() < k && i > -1 && j < all.size()){
             if(target - all.get(i) < all.get(j) - target){
                 result.add(all.get(i));
                 i--;
