@@ -10,7 +10,7 @@ public class Solution {
     }
     
     private boolean searchMatrix(int[][] m, int target, int r1, int c1, int r2, int c2) { 
-        if(r1 > r2 || c1 > r2) return false;
+        if(r1 > r2 || c1 > c2) return false;
         
         int mr = r1 + (r2 - r1)/2;
         int mc = c1 + (c2 - c1)/2;
