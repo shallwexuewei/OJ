@@ -3,51 +3,55 @@ public class Solution {
         if(preorder == null) {
             return false;
         }
-        return verifyPreorder(preorder, 0, preorder.length-1, Integer.MAX_VALUE, Integer.MIN_VALUE);
-    }
-    
-    private boolean verifyPreorder(int[] preorder, int low, int high, int max, int min) {
-        if(low >= high) {
+        
+        int len = preorder.length;
+        if(len < 2) {
             return true;
         }
         
-        int val = preorder[low];
-        if(val > max || val < min) {
-            return false;
-        }
+        int min = Integer.MIN_VALUE;
+        int max = preorder[0];
         
-        int i = low + 1;
-        
-        int left = low + 1;
-        int right = high;
-        while(left < right) {
-            int mid = left + (right - left)/2;
-            if(preorder[mid] > val) {
-                right = mid - 1;
+        int i = 1;
+        while(i < len) {
+            if(preorder[i] > max) {
+                min = max;
+                max = preorder[i];
             } else {
-                left = mid + 1;
-            }
-        }
-        /*
-        while(i < high) {
-            if(preorder[i] > val) {
-                break;
+                // preorder[i] < max
+                if(preorder[i] < min) {
+                    return false;
+                }
+                max = preorder[i];
             }
             i++;
         }
-        */
         
-        if(right == high) {
-            return verifyPreorder(preorder, low + 1, high, val, min);
-        } else if(left == low + 1) {
-            return verifyPreorder(preorder, low + 1, high, max, val);
-        } else {
-            return verifyPreorder(preorder, low + 1, i - 1, val, min) && verifyPreorder(preorder, i, high, max, val);
-        }
+        return true;
     }
+    
 }
 
 /*
+Wrong Answer More Details 
+
+Input:
+[3,1,4,2]
+Output:
+true
+Expected:
+false
+
+
+ Wrong Answer More Details 
+
+Input:
+[4,2,3,1]
+Output:
+true
+Expected:
+false
+
 Runtime Error Message:
 Line 30: java.lang.StackOverflowError
 Last executed input:
