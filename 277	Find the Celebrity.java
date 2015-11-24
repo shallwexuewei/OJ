@@ -2,38 +2,30 @@
       boolean knows(int a, int b); */
 
 public class Solution extends Relation {
-    /* 
-    The definition of a celebrity is that 
-    all the other n - 1 people know him/her but 
-    he/she does not know any of them. 
-    */
     public int findCelebrity(int n) {
-        ArrayList<Integer> candidates = new ArrayList<Integer>();
-        for(int i = 0; i < n; i++) {
-            candidates.add(i);
-        }
-        // if 0 knows some people
-        ArrayList<Integer> newCandidates = new ArrayList<Integer>();
-        while(candidates.size() > 1) {
-            for(int i = 1; i < candidates.size(); i += 2) {
-                if(knows(candidates.get(i-1), candidates.get(i))){
-                    if(!knows(candidates.get(i), candidates.get(i-1))){
-                        newCandidates.add(candidates.get(i));
-                    }
-                } else{
-                    if(knows(candidates.get(i), candidates.get(i-1))){
-                        newCandidates.add(candidates.get(i-1));
-                    }
-                }
-            }   
-            candidates = newCandidates;
-        }
-        
-        if(candidates.size() == 0) {
+        if (n <= 1) {
             return -1;
         }
-        return candidates.get(0);
-        
+         
+        int[] inDegree = new int[n];
+        int[] outDegree = new int[n];
+         
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i != j && knows(i, j)) {
+                    outDegree[i]++;
+                    inDegree[j]++;
+                }
+            }
+        }
+         
+        for (int i = 0; i < n; i++) {
+            if (inDegree[i] == n - 1 && outDegree[i] == 0) {
+                return i;
+            }
+        }
+         
+        return -1;
     }
 }
 
