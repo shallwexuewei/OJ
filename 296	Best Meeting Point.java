@@ -31,3 +31,15 @@ public class Solution {
         return sum;
     }
 }
+
+/*
+Your input
+
+[[1,0,0,0,1],[0,0,0,0,0],[0,0,1,0,0]]
+Your answer
+
+-4
+Expected answer
+
+6
+*/
