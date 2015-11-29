@@ -1,29 +1,12 @@
 public class Solution {
-    public int missingNumber(int[] nums) {
-        int n = nums.length;
-        
-        int sum = 0;
-        
-        for(int i:nums) {
-            if(i % 2 == 0) {
-                sum += i;
-            } else {
-                sum -= i;
-            }
+    public int missingNumber(int[] nums) { //xor
+        int res = nums.length; // note that the default value of res is nums.length!!!
+        for(int i=0; i<nums.length; i++){
+            res ^= i;
+            res ^= nums[i];
         }
-         
-        
-        int base = -(n+1)/2;
-        if(n % 2 == 0) {
-            base += n;
-        } 
-        
-        int ret = base - sum;
-        if(ret < 0) {
-            return -ret;
-        }
-        return ret;
-    } 
+        return res;
+    }
 }
 
 /*
