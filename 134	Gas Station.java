@@ -7,8 +7,14 @@ public class Solution {
         }
         int len = gas.length;
         int[] diff = new int[len];
+        int rest = 0;
         for(int i = 0; i < len; i++) {
             diff[i] = gas[i] - cost[i];
+            rest += diff[i];
+        }
+        
+        if(rest < 0) {
+            return -1;
         }
         
         int i = 0;
@@ -20,64 +26,15 @@ public class Solution {
         }
         
         int start = i;
-        int tank = diff[i];
-        int maxSt = i;
-        int maxTank = diff[i];
-        boolean prev = true;
-        
-        int tank0 = 0;
-        if(i == 0) {
-            tank0 = diff[0];
-        }
-        i++;
-        while(i < len) {
-            if(diff[i] > 0) {
-                if(prev) {
-                    tank += diff[i];
-                    if(start == 0) {
-                        tank0 = tank;
-                    }
-                } else {
-                    start = i;
-                    tank = diff[i];
-                    prev = true;
-                }
-            }
-            else {
-                if(prev) {
-                    if(tank > maxTank) {
-                        maxTank = tank;
-                        maxSt = start;
-                    }
-                    prev = false;
-                }
-            }
-            i++;
-        }
-        
-        if(prev) {
-            tank += tank0;
-            if(tank > maxTank) {
-                maxTank = tank;
-                maxSt = start;
-            }
-        }
-        
-        i = maxSt + 1;
-        i = i % len;
-        tank = diff[maxSt]; 
-        while(i != maxSt) {
+        int tank = 0;
+        for(; i < len; i++) {
             tank += diff[i];
             if(tank < 0) {
-                return -1;
-            }
-            
-            i++;
-            if(i == len) {
-                i = 0;
+                start = i + 1;
+                tank = 0;
             }
         }
-        return maxSt;
+        return start;
     }
 }
 
@@ -108,5 +65,13 @@ Output:
 Expected:
 2
 
+Submission Result: Wrong Answer More Details 
 
+Input:
+[1,2,3,3]
+[2,1,5,1]
+Output:
+2
+Expected:
+3
 */
