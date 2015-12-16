@@ -16,31 +16,37 @@
  * }
  */
 public class Solution {
-    public TreeNode sortedListToBST(ListNode head) {
-        ArrayList<Integer> arr = new ArrayList<Integer>();
+    ListNode current;
+    
+    public TreeNode sortedListToBST(ListNode head) { 
+        int len = 0;
+        
+        current = head;
+        
         while(head != null) {
-            arr.add(head.val);
+            len += 1;
             head = head.next;
         }
         
-        if(arr.size() == 0) {
+        if(len == 0) {
             return null;
         }
         
-        
-        return buildTree(arr, 0, arr.size()-1);
+        return buildTree(len);
     }
     
-    private TreeNode buildTree(ArrayList<Integer> arr, int low, int high) {
-        if(low > high) {
+    private TreeNode buildTree(int n) {
+        if(n < 1) {
             return null;
         }
         
-        int mid = low + (high - low)/2;
-        TreeNode node = new TreeNode(arr.get(mid));
-        node.left = buildTree(arr, low, mid-1);
-        node.right = buildTree(arr, mid+1, high);
-        
+        int half = n/2;
+        TreeNode node = new TreeNode(0);
+        node.left = buildTree(half); 
+        node.val = current.val;
+        current = current.next; 
+        node.right = buildTree(n - half - 1); 
+
         return node;
     }
 }
