@@ -24,19 +24,7 @@ public class Solution {
 				return -1;
 			} else if (num1 > num2) {
 				return 1;
-			} else {
-				int fra1 = 0;
-				int fra2 = 0;
-				if (vs1.length > 1)
-					fra1 = Integer.parseInt(vs1[1]);
-				if (vs2.length > 1)
-					fra2 = Integer.parseInt(vs2[1]);
-				if (fra1 < fra2) {
-					return -1;
-				} else if (fra1 > fra2) {
-					return 1;
-				}
-			}
+			}  
 			i++;
 		}
 
