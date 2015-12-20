@@ -1,85 +1,45 @@
 public class Solution {
-    public int compareVersion(String version1, String version2) {
-        String[] strs1 = version1.split("\\.");
-        String[] strs2 = version2.split("\\."); 
-        
-        int v1, v2;
-        
-        if(strs1.length == 1)
-            v1 = Integer.parseInt(version1);
-        else                 
-            v1 = Integer.parseInt(strs1[0]);
-        
-        if(strs2.length == 1)    
-            v2 = Integer.parseInt(version2);
-        else                 
-            v2 = Integer.parseInt(strs2[0]);
-        
-        
-        if(v1 > v2) return 1;
-        else if(v1 < v2) return -1;
-        else { 
-            int m1 = 0;
-            int m2 = 0;
-            if(strs1.length > 1) {
-                m1 = Integer.parseInt(strs1[1]);
-            }
-            if(strs2.length > 1) {
-                m2 = Integer.parseInt(strs2[1]);
-            }
-            if(m1 > m2) return 1;
-            else if(m1 < m2) return -1;
-            else return 0;
-        }
-    }
+  
+	public int compareVersion(String version1, String version2) {
+		String[] vs1 = version1.split("\\.");
+		String[] vs2 = version2.split("\\.");
+
+		int num1 = Integer.parseInt(vs1[0]);
+		int num2 = Integer.parseInt(vs2[0]);
+
+		int i = 0;
+		while (i < vs1.length || i < vs2.length) {
+			if (i >= vs1.length) {
+				num1 = 0;
+			} else {
+				num1 = Integer.parseInt(vs1[i]);
+			}
+			if (i >= vs2.length) {
+				num2 = 0;
+			} else {
+				num2 = Integer.parseInt(vs2[i]);
+			}
+
+			if (num1 < num2) {
+				return -1;
+			} else if (num1 > num2) {
+				return 1;
+			} else {
+				int fra1 = 0;
+				int fra2 = 0;
+				if (vs1.length > 1)
+					fra1 = Integer.parseInt(vs1[1]);
+				if (vs2.length > 1)
+					fra2 = Integer.parseInt(vs2[1]);
+				if (fra1 < fra2) {
+					return -1;
+				} else if (fra1 > fra2) {
+					return 1;
+				}
+			}
+			i++;
+		}
+
+		return 0;
+	}
 }
-
-
-/*
-Runtime Error
-
-Run Code Result: ×
-
-Your input
-
-"1"
-"0"
-Your answer
-
-Line 6: java.lang.ArrayIndexOutOfBoundsException: 0
-Expected answer
-
-1
-
- Runtime Error More Details 
-
-Runtime Error Message:
-Line 22: java.lang.ArrayIndexOutOfBoundsException: 1
-Last executed input:
-"01"
-"1"
-
-Runtime Error Message:
-Line 9: java.lang.NumberFormatException: For input string: "1.0"
-Last executed input:
-"1.0"
-"1.1"
-
-Input:
-"1.0"
-"1"
-Output:
-1
-Expected:
-0
-
-Wrong Answer More Details 
-
-Input:
-"1.0.1"
-"1"
-Output:
-0
-Expected:
-1
-*/
