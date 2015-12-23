@@ -1,73 +1,35 @@
 public class Solution {
-	public int calculateMinimumHP(int[][] dungeon) {
-		if (dungeon == null)
-			return -1;
-
-		int rows = dungeon.length;
-		if (rows == 0)
-			return -1;
-
-		int cols = dungeon[0].length;
-		if (cols == 0)
-			return -1;
-
-		int[] min = new int[cols];
-		int[] blood = new int[cols];
-		// fill 0 row
-		min[0] = dungeon[0][0];
-		blood[0] = min[0];
-		for (int c = 1; c < cols; c++) {
-			blood[c] = blood[c - 1] + dungeon[0][c];
-			min[c] = Math.min(min[c - 1], blood[c]);
-//			System.out.println(0 + ", " + c + ", " + blood[c] + ", " + min[c]);
-		}
-		for (int r = 1; r < rows; r++) {
-			blood[0] += dungeon[r][0];
-			if (min[0] > blood[0]) {
-				min[0] = blood[0];
-			}
-			//System.out.println(r + ", " + 0 + ", " + blood[0] + ", " + min[0]);
-			for (int c = 1; c < cols; c++) {
-				//System.out.println(min[c-1] +", " +min[c]);
-				if (min[c - 1] < min[c]) {
-					// up to down 
-					blood[c] += dungeon[r][c];
-				} else if (min[c - 1] > min[c]) {
-					// left to right
-					blood[c] = blood[c - 1] + dungeon[r][c]; 
-					min[c] = min[c-1];
-				} else {
-					// equal min, then choose the higher blood one
-					if (blood[c - 1] > blood[c]) {
-						// left to right
-						blood[c] = blood[c - 1] + dungeon[r][c];
-						min[c] = min[c-1];
-					} else {
-						// up to down
-						blood[c] += dungeon[r][c];
-					}
-				}
-
-				if (min[c] > blood[c]) {
-					min[c] = blood[c];
-				}
-
-				//System.out.println(r + ", " + c + ", " + blood[c] + ", " + min[c]);
-			}
-		}
-		if (min[cols - 1] >= 0) {
-			return 1;
-		} else {
-			return 1 - min[cols - 1];
-		}
-	} 
-
-	public static void main(String[] args) {
-		Solution s = new Solution();
-		int[][] dungeon = { { 0, -5 }, { 0, 0 } };
-		System.out.println(s.calculateMinimumHP(dungeon));
-	}
+    public int calculateMinimumHP(int[][] dungeon) {
+        if(dungeon == null) return 1;
+        
+        int rows = dungeon.length;
+        if(rows == 0)       return 1;
+        
+        int cols = dungeon[0].length;
+        if(cols == 0)       return 1;
+        
+        int[] hp = new int[cols];
+        // fill last row
+        int r = rows - 1;
+        int c = cols - 1;
+        hp[c] = Math.max(1-dungeon[r][c], 1);
+        for(c--; c > -1; c--) {
+            hp[c] = Math.max(hp[c+1]-dungeon[r][c], 1);
+        }
+        for(r--; r > -1; r--) {
+            c = cols - 1;
+            hp[c] = Math.max(hp[c]-dungeon[r][c], 1);
+            for(c--; c > -1; c--) { 
+                int down = Math.max(hp[c]-dungeon[r][c], 1);
+                int right = Math.max(hp[c+1]-dungeon[r][c], 1);
+                hp[c] = Math.min(down, right);
+            }
+        }
+        return hp[0];
+        
+    }
 }
+
 
 /*
 Submission Result: Runtime Error More Details 
