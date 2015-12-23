@@ -1,0 +1,26 @@
+public class Solution {
+    public int uniquePaths(int m, int n) {
+        if(m < 1 || n < 1) {
+            return 0;
+        }
+        
+        int[] cnts = new int[n];
+        Arrays.fill(cnts, 1); // the first row
+        for(int r = 1; r < m; r++) { 
+            for(int c = 1; c < n; c++) {
+                // now the cnts[c] is the previous row c column's value
+                cnts[c] += cnts[c-1]; // left to right
+            }
+        }
+        return cnts[n-1];
+    }
+     
+}
+
+/*
+Submission Result: Time Limit Exceeded More Details 
+
+Last executed input:
+23
+12
+*/
