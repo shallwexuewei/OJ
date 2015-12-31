@@ -1,33 +1,12 @@
 public class Solution {
     public String convertToTitle(int n) {
-        if(n < 1) {
-            return "";
+        String res = "";
+        while(n != 0) {
+            n--;
+            int tmp = n%26;
+            n /= 26;
+            res = (char)('A'+tmp) + res;
         }
-        return convertToTitle(n-1, "");
-    }
-    
-    private char int2char(int n) {
-        return (char)('A' + n);
-    }
-    
-    private String convertToTitle(int n, String suffix) {
-        if(n < 26) {
-            suffix = int2char(n) + suffix;
-            return suffix;
-        }
-        
-        suffix = int2char(n%26) + suffix;
-        return convertToTitle(n/26-1, suffix);
+        return res;
     }
 }
-
-/*
- Wrong Answer More Details 
-
-Input:
-52
-Output:
-"B@"
-Expected:
-"AZ"
-*/
