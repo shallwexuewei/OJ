@@ -13,17 +13,22 @@ public class Solution {
         String s1 = sb.toString();
         
         len = 2*len+1;
-        int[][] dfa = new int[256][len]; // 256 is the size of extended-ASCII
-        int x = 0; // the state for backtracing. 
-        for(int i = 1; i < len; i++){
-            char c = s1.charAt(i);
-            for(int r = 0; r < 256; r++) {
-                dfa[r][i] = dfa[r][x];
-            }
-            dfa[s1.charAt(i)][i] = i + 1;
-            x = dfa[s1.charAt(i)][x];
+    
+        int R = 256;
+        String pat = s;
+        int X = 0;
+
+        // build DFA from pattern
+        int M = pat.length();
+        int[][] dfa = new int[R][M]; 
+        dfa[pat.charAt(0)][0] = 1; 
+        for (int j = 1; j < M; j++) {
+            for (int c = 0; c < R; c++) 
+                dfa[c][j] = dfa[c][X];     // Copy mismatch cases. 
+            dfa[pat.charAt(j)][j] = j+1;   // Set match case. 
+            X = dfa[pat.charAt(j)][X];     // Update restart state. 
         } 
-        String rest = s.substring(x+1);
+        String rest = s.substring(X+1);
         sb = new StringBuilder(rest);
         sb.reverse();
         sb.append(s); 
