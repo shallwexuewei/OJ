@@ -1,78 +1,44 @@
 public class Solution { 
     
-    public String minWindow(String s, String t) {
-        HashMap<Character, LinkedList<Integer>> char2indices = new HashMap<Character, LinkedList<Integer>>();
+    public String minWindow(String s, String t) { 
         HashMap<Character, Integer> char2cnt = new HashMap<Character, Integer>();
-        HashMap<Character, ArrayList<Integer>> window = new HashMap<Character, ArrayList<Integer>>(); 
+        HashMap<Character, Integer> window = new HashMap<Character, Integer>(); 
         
         // O(T)
         for(int i = 0; i < t.length(); i++) {
             char c = t.charAt(i);
-            if(char2indices.containsKey(c)) {
-                char2cnt.put(c, char2cnt.get(c) + 1);
-                continue;
-            } 
-            char2indices.put(c, new LinkedList<Integer>());
-            window.put(c, new ArrayList<Integer>());
-            char2cnt.put(c, 1);
+            if(char2cnt.containsKey(c))     char2cnt.put(c, char2cnt.get(c) + 1);
+            else                            char2cnt.put(c, 1);
         }
         
-        // O(S)
-        for(int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if(char2indices.containsKey(c)) {
-                char2indices.get(c).add(i);
+        // O(S) or O(2S)
+        int letterCnt = 0;
+        int min = Integer.MAX_VALUE;
+        String res = "";
+        int left = 0;
+        for(int right = 0; right < s.length(); right++) {
+            char c = s.charAt(right);
+            if(char2cnt.containsKey(c)){
+                if(window.containsKey(c))   window.put(c, window.get(c) + 1);
+                else                        window.put(c, 1);
+                
+                if(window.get(c) <= char2cnt.get(c)) {
+                    letterCnt++;
+                }
             }
-        }
-        
-        int left = s.length();
-        int right = 0;
-        boolean fail = false;
-        for(Character c:char2cnt.keySet()){
-            int cnt = char2cnt.get(c);
-            LinkedList<Integer> indices = char2indices.get(c);
-            for(int i = 0; i < cnt; i++) {
-                if(indices.isEmpty()){
-                    fail = true;
-                    break;
-                } else {
-                    int index = indices.removeFirst();
-                    window.get(c).add(index);
-                    if(left > index) {
-                        left = index;
-                    } 
-                    if(right < index) {
-                        right = index;
+            if(letterCnt >= t.length()){
+                char cL = s.charAt(left);
+                while(!char2cnt.containsKey(cL) || window.get(cL) > char2cnt.get(cL)){
+                    if(window.containsKey(cL)){
+                        window.put(cL, window.get(cL)-1);
                     }
+                    left++;
+                    cL = s.charAt(left);
                 }
-            }
-            if(fail)    break;
-        }
-        
-        if(fail)    return "";
-        
-        int min = right - left + 1;
-        String res = s.substring(left, right + 1);
-        while(true) { 
-            char c = s.charAt(left);
-            if(char2indices.get(c).isEmpty()){
-                break;
-            }
-            window.get(c).remove(0);
-            int index = char2indices.get(c).removeFirst();
-            window.get(c).add(index);
-            if(index > right) {
-                right = index;
-            }
-            left = index;
-            for(Character ch:window.keySet()){
-                if(left > window.get(ch).get(0)) {
-                    left = window.get(ch).get(0);
+                if(min > right - left + 1) {
+                    min = right - left + 1;
+                    res = s.substring(left, right + 1);
                 }
-            }
-            if(min > right - left + 1) {
-                min = right - left + 1;
-                res = s.substring(left, right + 1);
             }
         } 
         return res;
