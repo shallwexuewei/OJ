@@ -1,58 +1,82 @@
-public class Solution { 
-    
-    public String minWindow(String s, String t) { 
-        HashMap<Character, Integer> char2cnt = new HashMap<Character, Integer>();
-        HashMap<Character, Integer> window = new HashMap<Character, Integer>(); 
+public class Solution {
+    public String minWindow(String s, String t) {
+        int lenS = s.length();
+        int lenT = t.length();
         
-        // O(T)
-        for(int i = 0; i < t.length(); i++) {
-            char c = t.charAt(i);
-            if(char2cnt.containsKey(c))     char2cnt.put(c, char2cnt.get(c) + 1);
-            else                            char2cnt.put(c, 1);
+        HashMap<Character, Integer> char2i = new HashMap<Character, Integer>();
+        
+        int index = 0;
+        ArrayList<Integer> cnts = new ArrayList<Integer>();
+        for(int k = 0; k < lenT; k++) {
+            char c = t.charAt(k);
+            if(!char2i.containsKey(c)) {
+                char2i.put(c, index);
+                cnts.add(1);
+                index++;
+            } else {
+                int i = char2i.get(c);
+                cnts.set(i, cnts.get(i) + 1);
+            }
         }
         
-        // O(S) or O(2S)
-        int letterCnt = 0;
+        int sizeT = index;
+        LinkedList<Integer> window = new LinkedList<Integer>();
+        int[] freq = new int[sizeT];  
+        int found = 0;
         int min = Integer.MAX_VALUE;
-        String res = "";
-        int left = 0;
-        for(int right = 0; right < s.length(); right++) {
-            char c = s.charAt(right);
-            if(char2cnt.containsKey(c)){
-                if(window.containsKey(c))   window.put(c, window.get(c) + 1);
-                else                        window.put(c, 1);
+        String minStr = "";
+        
+        
+        for(int i = 0; i < lenS; i++) {
+            char c = s.charAt(i);
+            if(char2i.containsKey(c)){
+                int ci = char2i.get(c);
+                freq[ci]++;
                 
-                if(window.get(c) <= char2cnt.get(c)) {
-                    letterCnt++;
+                if(freq[ci] == cnts.get(ci)) {
+                    found++;
                 }
-            }
-            if(letterCnt >= t.length()){
-                char cL = s.charAt(left);
-                while(!char2cnt.containsKey(cL) || window.get(cL) > char2cnt.get(cL)){
-                    if(window.containsKey(cL)){
-                        window.put(cL, window.get(cL)-1);
+                
+                window.add(i);
+                
+                    if(freq[ci] > cnts.get(ci)){ 
+                        // freq[ci] > ... ; can use assert here
+                        char headChar = s.charAt(window.get(0));
+                        int charI = char2i.get(headChar);
+                        while(freq[charI] > cnts.get(charI)) {
+                            window.removeFirst();
+                            freq[charI]--;
+                            headChar= s.charAt(window.get(0));
+                            charI = char2i.get(headChar);
+                        }
                     }
-                    left++;
-                    cL = s.charAt(left);
-                }
-                if(min > right - left + 1) {
-                    min = right - left + 1;
-                    res = s.substring(left, right + 1);
-                }
+                    
+                if(found >= sizeT) {
+                    int winLen = getWinLen(window);
+                    if(min > winLen) {
+                        min = winLen;
+                        minStr = s.substring(window.get(0), window.get(window.size() - 1)+1);
+                    }
+                } 
             }
-        } 
-        return res;
-    } 
+        }
+        return minStr;
+    }
+    
+    private int getWinLen(LinkedList<Integer> window) {
+        int last = window.size() - 1;
+        return window.get(last) - window.get(0) + 1;
+    }
 }
- 
+
 /*
 Submission Result: Wrong Answer More Details 
 
 Input:
-"bdab"
-"ab"
+"a"
+"aa"
 Output:
-"bda"
+"a"
 Expected:
-"ab"
+""
 */
