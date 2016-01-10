@@ -5,33 +5,39 @@ public class Solution {
             return 0;
         }
         
-        int[] dict = new int[256]; // extended ascii
+        // use dict to store the last position of the char 
+        HashMap<Character, Integer> char2i = new HashMap<Character, Integer>();
         
-        int st = 0;
-        int max = -1; // max len of window 
+        int left = 0;
+        int max = -1;
         
-        // window: double pointers
+        // window: double pointers, 
+        // right pointer: i
         for(int i = 0; i < len; i++) {
-            int ci = (int) s.charAt(i);
-            dict[ci]++;
+            char c = s.charAt(i);
             
-            if(dict[ci] > 1) {
-                // existed
-                while(true) {
-                    int stI = (int) s.charAt(st);
-                    dict[stI]--;
-                    st++;
-                    if(stI == ci) {
-                        break;
-                    }
+            if(char2i.containsKey(c)){
+                int lastPos = char2i.get(c);
+                if(lastPos + 1> left) {
+                    left = lastPos + 1;
                 }
-                
             }
-            
-            if(max < i - st + 1) {
-                max = i - st + 1;
+            char2i.put(c, i); 
+            if(max < i - left + 1) {
+                max = i - left + 1;
             }
         }
         return max;
     }
 }
+
+/*
+Submission Result: Wrong Answer More Details 
+
+Input:
+"abba"
+Output:
+3
+Expected:
+2
+*/
