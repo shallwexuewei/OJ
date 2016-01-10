@@ -1,0 +1,47 @@
+public class Solution {
+    public int coinChange(int[] coins, int amount) {
+        if(amount == 0) {
+            return 0;
+        }
+        if(coins == null || coins.length == 0) {
+            return -1;
+        }
+        
+        int len = coins.length;
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, -1);
+        dp[0] = 0;
+        for(int i = 0; i < amount; i++) {
+            if(dp[i] == -1) {
+                continue;
+            }
+            for(int j = 0; j < len; j++) {
+                int sum = i + coins[j];
+                if(sum > amount) {
+                    continue;
+                }
+                if(dp[sum] == -1 || dp[sum] > dp[i] + 1) {
+                    dp[sum] = dp[i] + 1;
+                }
+            }
+        }
+        
+        return dp[amount];
+    }
+}
+
+/*
+[0], 1 -> 0
+[1,2,5], 11 -> 3
+[2], 3 -> -1
+
+Submission Result: Wrong Answer More Details 
+
+Input:
+[186,419,83,408]
+6249
+Output:
+-1
+Expected:
+20
+*/
