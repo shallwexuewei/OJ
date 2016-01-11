@@ -9,23 +9,17 @@ public class NumMatrix {
         
         int C = matrix[0].length;
         
-        sums = new int[R][C+1];
-        for(int r = 0; r < R; r++) { 
-            sums[r][0] = 0;
-            for(int c = 0; c < C; c++) {
-                sums[r][c+1] = sums[r][c] + matrix[r][c];
+        sums = new int[R+1][C+1];
+        for(int r = 1; r <= R; r++) {  
+            for(int c = 1; c <= C; c++) {
+                sums[r][c] = sums[r][c-1] + sums[r-1][c] - sums[r-1][c-1] + matrix[r-1][c-1];
             }
         }
     }
 
     public int sumRegion(int row1, int col1, int row2, int col2) {
         // cornew cases: Illegal arguments, sums isn't initialized
-        
-        int sum = 0;
-        for(int r = row1; r <= row2; r++) {
-            sum += sums[r][col2+1] - sums[r][col1];
-        }
-        return sum;
+        return sums[row2+1][col2+1] - sums[row2+1][col1] - sums[row1][col2+1] + sums[row1][col1];
     }
 }
 
