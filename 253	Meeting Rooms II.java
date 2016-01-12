@@ -8,9 +8,13 @@
  * }
  */
 public class Solution {
-    public int minMeetingRooms(Interval[] intervals) { 
+    public int minMeetingRooms(Interval[] intervals) {
+        if(intervals == null)   return 0;
         
         int len = intervals.length;
+        if(len < 1)             return 0;
+        if(len == 1)            return 1;
+        
         Arrays.sort(intervals, new Comparator<Interval>() {
            @Override
            public int compare(Interval a, Interval b) {
@@ -18,51 +22,16 @@ public class Solution {
            }
         });
         
-        // use an array storing the end time of each meeting rooms
-        ArrayList<Integer> ends = new ArrayList<Integer>();
-        for(Interval i:intervals) {
-            if(ends.isEmpty()){
-                ends.add(i.end);
+        PriorityQueue<Integer> q = new PriorityQueue<Integer>();
+        q.add(intervals[0].end);
+        for(int i = 1; i < len; i++) {
+            if(intervals[i].start < q.peek()){
+                q.add(intervals[i].end);
+            } else {
+                q.poll();
+                q.add(intervals[i].end);
             }
-            else {
-                int minJ = -1;
-                int minDiff = Integer.MAX_VALUE;
-                for(int j = 0; j < ends.size(); j++) {
-                    if(ends.get(j) <= i.start) {
-                        int diff = i.start - ends.get(j);
-                        if(diff < minDiff) {
-                            diff = minDiff;
-                            minJ = j;
-                        } 
-                    }
-                }
-                if(minJ == -1) { 
-                    ends.add(i.end);
-                } else {
-                    ends.set(minJ, i.end);
-                }
-            } 
         }
-        return ends.size();
+        return q.size();
     }
 }
-
-/*
-Wrong Answer More Details 
-
-Input:
-[[13,15],[1,13]]
-Output:
-2
-Expected:
-1
-
-Wrong Answer More Details 
-
-Input:
-[[1293,2986],[848,3846],[4284,5907],[4466,4781],[518,2918],[300,5870]]
-Output:
-5
-Expected:
-4
-*/
