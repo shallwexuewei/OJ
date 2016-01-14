@@ -1,12 +1,12 @@
 public class Solution {
     public class Course{
         public int index;
-        public HashSet<Course> prevList;
-        public HashSet<Course> deeperList;
+        public LinkedList<Course> prevList;
+        public LinkedList<Course> deeperList;
         public Course(int i) {
             index = i;
-            prevList = new HashSet<Course>();
-            deeperList = new HashSet<Course>();
+            prevList = new LinkedList<Course>();
+            deeperList = new LinkedList<Course>();
         }
         
         public void addPrev(Course prev) {
