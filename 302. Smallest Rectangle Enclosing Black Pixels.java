@@ -1,59 +1,74 @@
 public class Solution {
     public int minArea(char[][] image, int x, int y) {
-        int down = x;
-        int up = x;
-        int left = y;
-        int right = y;
-        
-        LinkedList<Integer[]> list = new LinkedList<Integer[]>();
-        Integer[] xy = new Integer[2];
-        xy[0] = x;
-        xy[1] = y;
-        list.add(xy);
-        
         int height = image.length;
         int width = image[0].length;
-        while(!list.isEmpty()){
-            xy = list.removeFirst();
-            x = xy[0];
-            y = xy[1];
-            // up
-            if(x > 0 && image[x-1][y] == '1'){
-                addQueue(list, x - 1, y, image);
-                if(x - 1 < up) {
-                    up = x - 1;
-                }
-            }
-            // down
-            if(x < height - 1 && image[x+1][y] == '1') {
-                addQueue(list, x + 1, y, image);
-                if(x + 1 > down) {
-                    down = x + 1;
-                }
-            }
-            // left
-            if(y > 0 && image[x][y-1] == '1') { 
-                addQueue(list, x, y-1, image); 
-                if(y - 1 < left) {
-                    left = y - 1;
-                }
-            }
-            // right
-            if(y < width - 1 && image[x][y+1] == '1') { 
-                addQueue(list, x, y + 1, image);  
-                if(y + 1 > right) {
-                    right = y + 1;
-                }
+        
+        int r = x;
+        int c = y;
+        int up = 0;
+        while(up < r) {
+            int mid = up + (r - up)/2;
+            if(checkRow(image, mid, 0, width-1)){
+                r = mid;
+            } else {
+                up = mid + 1;
             }
         }
-        return (right - left + 1)*(down - up + 1);
+        up = r;
+        
+        r = x;
+        int down = height - 1;
+        while(down > r) {
+            int mid = r + (down - r + 1)/2;
+            if(checkRow(image, mid, 0, width - 1)) {
+                r = mid;
+            } else {
+                down = mid - 1;
+            }
+        }
+        down = r;
+        
+        int left = 0;
+        while(left < c) {
+            int mid = left + (c - left)/2;
+            if(checkCol(image, mid, up, down)) {
+                c = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        left = c;
+        
+        c = y;
+        int right = width - 1;
+        while(right > c) {
+            int mid = c + (right - c + 1)/2;
+            if(checkCol(image, mid, up, down)) {
+                c = mid;
+            } else {
+                right = mid - 1;
+            }
+        }
+        right = c;
+        
+        return (right - left + 1) * (down - up + 1);
     }
     
-    private void addQueue(LinkedList<Integer[]> q, int x, int y, char[][] image) {
-        Integer[] xy = new Integer[2];
-        xy[0] = x;
-        xy[1] = y;
-        q.add(xy);
-        image[xy[0]][xy[1]] = '0';
+    private boolean checkRow(char[][] image, int r, int st, int end) {
+        for(int c = st; c <= end; c++) {
+            if(image[r][c] == '1') {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private boolean checkCol(char[][] image, int c, int st, int end) {
+        for(int r = st; r <= end; r++) {
+            if(image[r][c] == '1') {
+                return true;
+            }
+        }
+        return false;
     }
 }
