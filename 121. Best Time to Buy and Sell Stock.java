@@ -5,17 +5,16 @@ public class Solution {
             return 0;
         }
         
-        int[] min = new int[len];
-        min[0] = prices[0];
-        for(int i = 1; i < len; i++) {
-            min[i] = Math.min(min[i-1], prices[i]);
-        }
-        
+        int valley = 0;
         int profit = 0;
-        for(int i = len-1; i > -1; i--) {
-            profit = Math.max(profit, prices[i] - min[i]);
+        valley = prices[0];
+        for(int i = 1; i < len; i++) {
+            if(valley > prices[i]) {
+                valley = prices[i];
+            } else if(valley < prices[i]) {
+                profit = Math.max(profit, prices[i] - valley);
+            }
         }
-        
         return profit;
     }
 }
