@@ -9,6 +9,8 @@ public class Solution {
             return 0;
         }
         
+        // the ith value in left array means the maximum profit 
+        // that could be achieved to sell the stock at prices[i]
         int[] left = new int[len];
         
         int valley = prices[0];
@@ -27,6 +29,8 @@ public class Solution {
             if(peak < prices[i]) {
                 peak = prices[i];
             }
+            // the following function seems that we could buy the stock when we sell the stock
+            // actually it's the situation that only one tranzaction is enough to make the largest profit.
             res = Math.max(res, left[i] + peak - prices[i]);
         } 
         
