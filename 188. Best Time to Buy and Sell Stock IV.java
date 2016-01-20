@@ -24,6 +24,19 @@ public class Solution {
             return res;
         }
         
+        /*
+        int[][] dp = new int[k+1][len];
+        for(int i = 1; i <= k; i++) {
+            int localMax = dp[i-1][0] - prices[0];
+            for(int j = 1; j < len; j++) {
+                dp[i][j] = Math.max(dp[i][j-1], prices[j] + localMax);
+                localMax = Math.max(localMax, dp[i-1][j] - prices[j]);
+            }
+        }
+        return dp[k][len-1];
+        */
+        
+        
         // use k+1 rows rather than k, to prevent the ArrayIndexOutOfBoundsException
         // in dp[i-1][j]
         int[] dp = new int[len];
@@ -35,7 +48,7 @@ public class Solution {
                 localMax = Math.max(localMax, last_dp_j - prices[j]);  
             }
         }
-        
+         
         return dp[len-1];
     }
 }
