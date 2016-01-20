@@ -1,19 +1,64 @@
 public class Solution {
-    public List<Integer> countSmaller(int[] nums) {
-        List<Integer> res = new ArrayList<Integer>();
-        int len = nums.length;
-        if(len == 0) {
-            return res;
+    class NumberIndex {
+        int number;
+        int index;
+    
+        NumberIndex(int number, int index) {
+            this.number = number;
+            this.index = index;
         }
+    
+        NumberIndex(NumberIndex another) {
+            this.number = another.number;
+            this.index = another.index;
+        }
+    }
+    
+    public List<Integer> countSmaller(int[] nums) {
+        NumberIndex[] cnums = new NumberIndex[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            cnums[i] = new NumberIndex(nums[i], i);
+        }
+        int[] smaller = new int[nums.length];
         
-        for(int i = 0; i < len; i++) {
-            int count = 0;
-            for(int j = i + 1; j < len; j++) {
-                if(nums[j] < nums[i])   count++;
-            }
-            res.add(count);
+        sort(cnums, smaller);
+        List<Integer> res = new ArrayList<>();
+        for (int i : smaller) {
+            res.add(i);
         }
         return res;
+    }
+    
+    private NumberIndex[] sort(NumberIndex[] nums, int[] smaller) {
+        int half = nums.length / 2;
+        int rest = nums.length - half;
+        if (half > 0) {
+            NumberIndex[] leftPart = new NumberIndex[half];
+            NumberIndex[] rightPart = new NumberIndex[rest];
+            
+            for (int i = 0; i < leftPart.length; i++) {
+                leftPart[i] = new NumberIndex(nums[i]);
+            }
+            for (int i = 0; i < rightPart.length; i++) {
+                rightPart[i] = new NumberIndex(nums[half + i]);
+            }
+            
+            NumberIndex[] left = sort(leftPart, smaller);
+            NumberIndex[] right = sort(rightPart, smaller);
+            
+            int i = 0, j = 0;
+            while (i < half || j < rest) {
+                if (j == rest || i < half && left[i].number <= right[j].number) {
+                    nums[i + j] = left[i];
+                    smaller[left[i].index] += j;
+                    i++;
+                } else {
+                    nums[i + j] = right[j];
+                    j++;
+                }
+            }
+        }
+        return nums;
     }
 }
 
