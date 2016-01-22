@@ -1,47 +1,25 @@
 public class Solution {
     public boolean isStrobogrammatic(String num) {
-        /*
-        9 6
-        8 8 
-        6 9
-        5 5
-        1 1
-        0 0
-        */
-        int[] map = new int[10];
-        Arrays.fill(map, -1);
-        map[9] = 6;
-        map[8] = 8;
-        map[6] = 9;
-        //map[5] = 5;
-        map[1] = 1;
-        map[0] = 0;
-        
-        /*
-        double pointer to traverse
-        */
-        /* 
-        no linked list!!! Why do you want to use double pointer?!!!
-        it's array of chars!!! We could use index!!!
-        int fast = 0;
-        int slow = 0;
         int len = num.length();
-        while(fast + 2 < len) {
-            slow++;
-            fast += 2;
+        if(len == 0) {
+            return false;
         }
-        */
-        int len = num.length();
-        int i = 0;
-        int j = len - 1;
-        while(i <= j) {
-            int ni = num.charAt(i) - '0';
-            int nj = num.charAt(j) - '0';
-            if(map[ni] != nj) {
-                return false;
-            }
-            i++;
-            j--;
+        
+        HashMap<Character, Character> map = new HashMap<Character, Character>();
+        map.put('0', '0');
+        map.put('1', '1'); 
+        map.put('6', '9');
+        map.put('8', '8');
+        map.put('9', '6');
+        
+        int lo = 0; 
+        int hi = len - 1;
+        while(lo <= hi) {
+            char loChar = num.charAt(lo);
+            if(!map.containsKey(loChar))            return false;
+            if(map.get(loChar) != num.charAt(hi))   return false;
+            lo++;
+            hi--;
         }
         return true;
         
@@ -49,21 +27,10 @@ public class Solution {
 }
 
 /*
-Input:
-"11"
-Tile Limit Exceeds
+Submission Result: Runtime Error More Details 
 
-Input:
+Runtime Error Message:
+Line 19: java.lang.NullPointerException
+Last executed input:
 "2"
-Output:
-true
-Expected:
-false
-
-Input:
-"5"
-Output:
-true
-Expected:
-false
 */
