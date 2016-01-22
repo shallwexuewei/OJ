@@ -1,47 +1,51 @@
 public class Solution {
     public List<String> findStrobogrammatic(int n) {
-        List<String> result = new LinkedList<String>();
-        if(n == 0) {
-            return result;
-        }
+        char[] singles = {'0', '1', '8'};
+        char[] pair = {'6', '9'};
         
-        /*
-        9 6
-        8 8 
-        6 9
-        1 1
-        0 0
-        */
-        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
-        map.put(9, 6);
-        map.put(8, 8);
-        map.put(6, 9);
-        map.put(1, 1);
-        map.put(0, 0);
-        
-        makeStrobogrammatic("", map, "", 0, n-1, result);
+        char[] chars = new char[n];
+        List<String> result = new ArrayList<String>();
+        buildStrings(chars, singles, pair, result, 0, n-1);
         return result;
     }
     
-    public void makeStrobogrammatic(String prefix, HashMap<Integer, Integer> map, String profix, int i, int j, List<String> result) {
-        // base case:
-        if(i > j) {
-            result.add(prefix + profix);
-            return;
-        } else if(i == j) {
-            for(Integer key:map.keySet()){
-                if(key == map.get(key)){
-                    result.add(prefix + key + profix);
-                }
+    private void buildStrings(char[] chars, char[] singles, char[] pair, List<String> result, int left, int right) {
+        if(left == right) {
+            for(char c:singles) {
+                chars[left] = c;
+                String s = new String(chars);
+                result.add(s);
             }
-            return;
+        } else if(left > right) {
+            String s = new String(chars);
+            result.add(s);
+        } else {
+            // left < right
+            int i = 0;
+            if(left == 0)    i = 1;
+            for(; i < singles.length; i++) {
+                chars[left] = singles[i];
+                chars[right] = singles[i];
+                buildStrings(chars, singles, pair, result, left + 1, right - 1);
+            } 
+            for( i = 0; i < 2; i++) {
+                chars[left] = pair[i];
+                chars[right] = pair[1-i];
+                buildStrings(chars, singles, pair, result, left + 1, right - 1);
+            }
         }
         
-        for(Integer key:map.keySet()){
-            if(i == 0 && key == 0) {
-                continue;
-            }
-            makeStrobogrammatic(prefix + key, map, map.get(key) + profix, i+1, j-1, result);
-        }
+        
     }
 }
+
+/*
+Submission Result: Wrong Answer More Details 
+
+Input:
+2
+Output:
+["00","11","88","69","96"]
+Expected:
+["11","69","88","96"]
+*/
