@@ -44,3 +44,12 @@ public class Solution {
         return res;
     }
 }
+
+/*
+Input:
+["az","yx"]
+Output:
+[["az"],["yx"]]
+Expected:
+[["az","yx"]]
+*/
