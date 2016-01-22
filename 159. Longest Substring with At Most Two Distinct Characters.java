@@ -1,45 +1,49 @@
 public class Solution {
     public int lengthOfLongestSubstringTwoDistinct(String s) {
+        int[] counts = new int[256];
+        
         int len = s.length();
-        if(len == 0)    return 0;
+        if(len < 3) {
+            return len;
+        }
         
-        int[] dict = new int[256]; // exteneded ascii
+        counts[s.charAt(0)]++;
+        int distNum = 1;
+        int max = 0;
         
-        int cnt = 0;
-        int max = -1;
-        int st = 0;
-        
-        for(int i = 0; i < len; i++) {
-            int charI = (int) s.charAt(i);
-            dict[charI]++;
-            if(dict[charI] == 1) {
-                cnt++;
-                // new char
-                while(cnt > 2) {
-                    int stI = (int) s.charAt(st);
-                    dict[stI]--;
-                    if(dict[stI] == 0) {
-                        cnt--;
+        // left pointer points to index 0
+        int left = 0;
+        for(int right = 1; right < len; right++) {
+            char rightChar = s.charAt(right);
+            counts[rightChar]++;
+            if(counts[rightChar] == 1) {
+                if(distNum < 2) {
+                    distNum++;
+                } else {
+                    char leftChar = s.charAt(left);
+                    while(counts[leftChar] > 0) {
+                        leftChar = s.charAt(left);
+                        counts[leftChar]--;
+                        left++;
                     }
-                    st++;
                 }
             }
-            if(i - st + 1 > max) {
-                max = i - st + 1;
+            
+            int winLen = right - left + 1;
+            if(winLen > max) {
+                max = winLen;
             }
         }
-        return max;
         
+        return max;
     }
 }
 
 /*
-Submission Result: Wrong Answer More Details 
+Submission Result: Runtime Error More Details 
 
-Input:
+Runtime Error Message:
+Line 25: java.lang.StringIndexOutOfBoundsException: String index out of range: 3
+Last executed input:
 "abc"
-Output:
-3
-Expected:
-2
 */
