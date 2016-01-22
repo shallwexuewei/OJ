@@ -1,87 +1,46 @@
 public class Solution {
-    public List<List<String>> groupStrings(String[] strings) {
-        HashMap<String, LinkedList<String>> groups = new HashMap<String, LinkedList<String>>();
-        for(String str:strings) {
-            String shifted = shift(str);
-            if(groups.containsKey(shifted)){
-                groups.get(shifted).add(str);
-            } else {
-                LinkedList<String> group = new LinkedList<String>();
-                group.add(str);
-                groups.put(shifted, group);
+    private String shiftString(String s) {
+        int len = s.length();
+        if(len == 1)            return "a";
+        
+        if(s.charAt(0) == 'a')  return s;
+        
+        int shift = s.charAt(0) - 'a';
+        char[] newChars = new char[len];
+        
+        int lo = 'a';
+        int hi = 'z';
+        for(int i = 0; i < len; i++) {
+            int newCharI = s.charAt(i) - shift;
+            if(newCharI < lo) {
+                newCharI += 26;
             }
+            newChars[i] = (char) newCharI;
         }
-        List<List<String>> result = new LinkedList<List<String>>();
-        for(String key:groups.keySet()){
-            List<String> group = groups.get(key);
-            Collections.sort(group);
-            result.add(group);
-        }
-        return result;
+        return new String(newChars);
     }
     
-    private String shift(String str){
-        char c = str.charAt(0);
-        int shift = c - 'a';
-        StringBuilder builder = new StringBuilder();
-        for(int i = 0; i < str.length(); i++) {
-            int index = str.charAt(i) - shift;
-            if(index < 'a') {
-                index += 'z' - 'a' + 1;
+    public List<List<String>> groupStrings(String[] strings) {
+        int len = strings.length;
+        List<List<String>> res = new ArrayList<List<String>>();
+        if(len == 0)    return res;
+        
+        HashMap<String, List<String>> shiftGroup = new HashMap<String, List<String>>();
+        for(String s:strings) {
+            String shifted = shiftString(s);
+            if(shiftGroup.containsKey(shifted)){
+                shiftGroup.get(shifted).add(s);
+            } else {
+                List<String> list = new ArrayList<String>();
+                list.add(s);
+                shiftGroup.put(shifted, list);
             }
-            char newC = (char)index;
-            builder.append(newC);
         }
-        return builder.toString();
+        
+        for(String s:shiftGroup.keySet()){
+            Collections.sort(shiftGroup.get(s));
+            res.add(shiftGroup.get(s));
+        }
+        return res;
     }
 }
-
-/*
- Wrong Answer More Details 
-
-Input:
-["fpbnsbrkbcyzdmmmoisaa"
-"cpjtwqcdwbldwwrryuclcngw"
-"a"
-"fnuqwejouqzrif"
-"js"
-"qcpr"
-"zghmdiaqmfelr"
-"iedda"
-"l"
-"dgwlvcyubde"
-"lpt"
-"qzq"
-"zkddvitlk"
-"xbogegswmad"
-"mkndeyrh"
-"llofdjckor"
-"lebzshcb"
-"firomjjlidqpsdeqyn"
-"dclpiqbypjpfafukqmjnjg"
-"lbpabjpcmkyivbtgdwhzlxa"
-"wmalmuanxvjtgmerohskwil"
-"yxgkdlwtkekavapflheieb"
-"oraxvssurmzybmnzhw"
-"ohecvkfe"
-"kknecibjnq"
-"wuxnoibr"
-"gkxpnpbfvjm"
-"lwpphufxw"
-"sbs"
-"txb"
-"ilbqahdzgij"
-"i"
-"zvuur"
-"yfglchzpledkq"
-"eqdf"
-"nw"
-"aiplrzejplumda"
-"d"
-"huoybvhibgqibbwwdzhqhslb"
-"rbnzendwnoklpyyyauemm"]
-Output:
-[["zghmdiaqmfelr","yfglchzpledkq"],["a","l","i","d"],["lpt","txb"],["dclpiqbypjpfafukqmjnjg","yxgkdlwtkekavapflheieb"],["xbogegswmad","gkxpnpbfvjm"],["js","nw"],["mkndeyrh","wuxnoibr"],["fpbnsbrkbcyzdmmmoisaa","rbnzendwnoklpyyyauemm"],["zkddvitlk","lwpphufxw"],["llofdjckor","kknecibjnq"],["cpjtwqcdwbldwwrryuclcngw","huoybvhibgqibbwwdzhqhslb"],["iedda","zvuur"],["firomjjlidqpsdeqyn","oraxvssurmzybmnzhw"],["qcpr","eqdf"],["qzq","sbs"],["dgwlvcyubde","ilbqahdzgij"],["lebzshcb","ohecvkfe"],["lbpabjpcmkyivbtgdwhzlxa","wmalmuanxvjtgmerohskwil"],["fnuqwejouqzrif","aiplrzejplumda"]]
-Expected:
-[["a","d","i","l"],["eqdf","qcpr"],["lpt","txb"],["yfglchzpledkq","zghmdiaqmfelr"],["kknecibjnq","llofdjckor"],["cpjtwqcdwbldwwrryuclcngw","huoybvhibgqibbwwdzhqhslb"],["lbpabjpcmkyivbtgdwhzlxa","wmalmuanxvjtgmerohskwil"],["iedda","zvuur"],["js","nw"],["lebzshcb","ohecvkfe"],["dgwlvcyubde","ilbqahdzgij"],["lwpphufxw","zkddvitlk"],["qzq","sbs"],["dclpiqbypjpfafukqmjnjg","yxgkdlwtkekavapflheieb"],["mkndeyrh","wuxnoibr"],["firomjjlidqpsdeqyn","oraxvssurmzybmnzhw"],["gkxpnpbfvjm","xbogegswmad"],["fpbnsbrkbcyzdmmmoisaa","rbnzendwnoklpyyyauemm"],["aiplrzejplumda","fnuqwejouqzrif"]]
-*/
