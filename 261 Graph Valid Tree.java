@@ -2,7 +2,9 @@ public class Solution {
     public boolean validTree(int n, int[][] edges) {
         
         int[] parent = new int[n];
-        Arrays.fill(parent, -1);
+        for(int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
         
         int len = edges.length;
         if(len != n - 1) {
@@ -25,7 +27,8 @@ public class Solution {
     }
     
     private int find(int[] parent, int i) {
-        if(parent[i] != -1) {
+        if(parent[i] != i) {
+            parent[i] = parent[parent[i]];
             return find(parent, parent[i]);
         }
         return i;
