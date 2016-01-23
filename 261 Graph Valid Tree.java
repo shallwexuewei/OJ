@@ -1,55 +1,33 @@
 public class Solution {
-    /*
-    1. all connected
-    2. no cycle
-    */
     public boolean validTree(int n, int[][] edges) {
-        ArrayList<HashSet<Integer>> neighbors = new ArrayList<HashSet<Integer>>(n);
-        for(int i = 0; i < n; i++) {
-            neighbors.add(new HashSet<Integer>());
-        }
         
-        for(int[] edge:edges) {
-            neighbors.get(edge[0]).add(edge[1]);
-            neighbors.get(edge[1]).add(edge[0]);
-        }
+        int[] parent = new int[n];
+        Arrays.fill(parent, -1);
         
-        
-        HashSet<Integer> visited = new HashSet<Integer>();
-        LinkedList<Integer> q = new LinkedList<Integer>();
-        LinkedList<Integer> prevs = new LinkedList<Integer>();
-        
-        q.add(0);
-        prevs.add(-1);
-        while(!q.isEmpty()) {
-            int current = q.removeFirst();
-            int prev = prevs.removeFirst();
-            
-            if(visited.contains(current)) return false;
-            
-            visited.add(current);
-            for(int i:neighbors.get(current)){
-                if(i != prev) {
-                    q.add(i);
-                    prevs.add(current);
-                }
-            }
-        }
-        
-        if(visited.size() == n) {
-            return true;
-        } else {
+        int len = edges.length;
+        if(len != n - 1) {
             return false;
         }
         
+        for(int i = 0; i < len; i++) {
+            int root0 = find(parent, edges[i][0]);
+            int root1 = find(parent, edges[i][1]);
+            
+            if(root0 == root1) {
+                return false;
+            }
+            
+            parent[root1] = root0;
+        }
+        
+        
+        return true;
+    }
+    
+    private int find(int[] parent, int i) {
+        if(parent[i] != -1) {
+            return find(parent, parent[i]);
+        }
+        return i;
     }
 }
-/*
-Input:
-3
-[[2,0],[2,1]]
-Output:
-false
-Expected:
-true
-*/
