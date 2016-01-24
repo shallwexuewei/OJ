@@ -9,39 +9,37 @@
  */
 public class Solution {
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
-        List<List<Integer>> res = new LinkedList<List<Integer>>();
-        LinkedList<Integer> path = new LinkedList<Integer>();
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        if(root == null)    return result;
         
-        if(root == null) {
-            return res;
-        }
-        
-        pathSum(root, sum, path, res);
-        return res;
-        
+        LinkedList<Integer> stack = new LinkedList<Integer>();
+        findPaths(root, sum, stack, result);
+        return result;
     }
     
-    private void pathSum(TreeNode node, int rest, LinkedList<Integer> path, List<List<Integer>> res) {
+    private void findPaths(TreeNode node, int sum, LinkedList<Integer> stack, List<List<Integer>> result) {
         
-        path.add(node.val);
-        // base case
+        
+        int rest = sum - node.val;
         if(node.left == null && node.right == null) {
-            if(node.val == rest) { 
-                res.add(new LinkedList<Integer>(path));
-            }
-            path.removeLast();
+            if(rest == 0) {
+                ArrayList list = new ArrayList();
+                list.addAll(stack);
+                list.add(node.val);
+                result.add(list);
+            } 
             return;
         }
+        
+        stack.add(node.val);
+        
         if(node.left != null) {
-            pathSum(node.left, rest-node.val, path, res);
+            findPaths(node.left, rest, stack, result);
         }
         if(node.right != null) {
-            pathSum(node.right, rest-node.val, path, res);
+            findPaths(node.right, rest, stack, result);
         }
-        path.removeLast();
+        
+        stack.removeLast();
     }
 }
-
-/*
-Line 30: error: List is abstract; cannot be instantiated
-*/
