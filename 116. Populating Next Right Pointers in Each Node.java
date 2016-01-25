@@ -8,41 +8,40 @@
  */
 public class Solution {
     public void connect(TreeLinkNode root) {
-        if(root == null) {
-            return;
+        if(root == null)    return;
+        
+        
+        root.next = null;
+        TreeLinkNode next = root;
+        while(next.left != null) {
+            TreeLinkNode cur = next;
+            next = cur.left;
+            
+            cur.left.next = cur.right;
+            TreeLinkNode prev = cur;
+            cur = cur.next;
+            while(cur != null) {
+                prev.right.next = cur.left;
+                cur.left.next = cur.right;
+                prev = cur;
+                cur = cur.next;
+            }
+            prev.right.next = null;
         }
         
-        LinkedList<TreeLinkNode> q = new LinkedList<TreeLinkNode>();
-        LinkedList<Integer> depths = new LinkedList<Integer>();
-        q.add(root);
-        depths.add(0);
-        TreeLinkNode prev = null;
-        int prevD = -1;
-        while(!q.isEmpty()){
-            TreeLinkNode node = q.removeFirst();
-            int d = depths.removeFirst();
-            if(prev == null) {
-                
-            } else {
-                if (prevD == d) {
-                    prev.next = node;
-                } else {
-                    prev.next = null;
-                }
-            }
-            if(node.left != null) {
-                q.add(node.left);
-                depths.add(d+1);
-            } 
-            if(node.right != null) {
-                q.add(node.right);
-                depths.add(d+1);
-            }
-            prevD = d;
-            prev = node;
-        }
-        if(prev != null) {
-            prev.next = null;
-        }
     }
 }
+
+/*
+Submission Result: Runtime Error More Details 
+
+Runtime Error Message:
+Line 27: java.lang.NullPointerException
+Last executed input:
+{1,2,3}
+
+Submission Result: Time Limit Exceeded More Details 
+
+Last executed input:
+{0,1,2,3,4,5,6}
+*/
