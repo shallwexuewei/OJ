@@ -13,30 +13,21 @@ public class Solution {
     public int sumNumbers(TreeNode root) {
         if(root == null)   return 0;
         
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        sumNumbers(root, list);
+        sumNumbers(root, 0);
         return sum;
         
     }
     
-    private void sumNumbers(TreeNode node, ArrayList<Integer> list) {
+    private void sumNumbers(TreeNode node, int preNum) {
+        int num = preNum*10 + node.val;
+        
         if(node.left == null && node.right == null) {
-            int num = node.val;
-            int size = list.size();
-            int times = 10;
-            for(int i = size - 1; i > -1; i--) {
-                num += times*list.get(i);
-                times *= 10;
-            }
             sum += num;
             return ;
         }
         
-        list.add(node.val);
+        if(node.left != null)   sumNumbers(node.left, num);
+        if(node.right != null)  sumNumbers(node.right, num);
         
-        if(node.left != null)   sumNumbers(node.left, list);
-        if(node.right != null)  sumNumbers(node.right, list);
-        
-        list.remove(list.size()-1);
     }
 }
