@@ -9,40 +9,37 @@
  */
 public class Solution {
     public void flatten(TreeNode root) {
-        if(root == null) {
-            return;
+        if(root == null)    return;
+        
+        flatten(root.left);
+        flatten(root.right);
+        
+        if(root.left != null) {
+            TreeNode leftLast = root.left;
+            while(leftLast.right != null) {
+                leftLast = leftLast.right;
+            }
+            leftLast.right = root.right;
+            root.right = root.left;
+            root.left = null;
         }
-        
-        rightmost(root); 
-    }
-    
-    public TreeNode rightmost(TreeNode node) { 
-        if(node.left == null && node.right == null) { 
-            return node;
-        } 
-        
-        // inorder  
-        if(node.left == null) {
-            return rightmost(node.right);
-        } else { 
-            TreeNode right = node.right;
-            node.right = node.left;
-            TreeNode prev = rightmost(node.left);  
-            node.left = null;
-            prev.right = right;  
-            return rightmost(node.right);
-        }
-        
-    } 
+     }
 }
 
 /*
 Submission Result: Wrong Answer More Details 
 
 Input:
-[1,2]
+[1,2,null,3]
 Output:
-[1,2]
-Expected:
 [1,null,2]
+Expected:
+[1,null,2,null,3]
+
+Submission Result: Runtime Error More Details 
+
+Runtime Error Message:
+Line 18: java.lang.NullPointerException
+Last executed input:
+[1,2]
 */
