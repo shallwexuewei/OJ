@@ -62,3 +62,11 @@ public class Solution {
         return result;
     }
 }
+/*
+Input:
+[6,1,null,null,3,2,5,null,null,4]
+Output:
+[[2],[1],[6,3,4],[5]]
+Expected:
+[[1,2],[6,3,4],[5]]
+*/
