@@ -26,9 +26,9 @@ public class Solution {
                 TreeNode node = queue.poll();
                 // left or right?
                 if(col < 0) {
-                    int abs = -col-1;
-                    if(leftCols.size() > abs) {
-                        leftCols.get(abs).add(node.val);
+                    int index = -col-1;
+                    if(leftCols.size() > index) {
+                        leftCols.get(index).add(node.val);
                     } else {
                         ArrayList<Integer> list = new ArrayList<Integer>();
                         list.add(node.val);
