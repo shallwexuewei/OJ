@@ -1,68 +1,48 @@
 public class Solution {
-    /*
-    as '*' Matches zero or more of the preceding element, we need to pre-look the next char in case of '*'
-    */
     public boolean isMatch(String s, String p) {
-        return isMatch(s, p, 0, 0);
-    }
-    
-    private boolean isMatch(String s, String p, int i1, int i2) {
-        int len1 = s.length();
-        int len2 = p.length();
+        int lenS = s.length();
+        int lenP = p.length();
         
-        /* base case */
-        if(i2 == len2) {
-            return i1 == len1;
-        }
+        boolean[][] dp = new boolean[lenS+1][lenP+1];
         
-        // s and p both has length of more than or equal to 1 
-        // case 1: no *, 
-        // case 2: *
-        // case 3: p.len = 1
-        if(i2 == len2 - 1 || p.charAt(i2 + 1) != '*' ) {
-            if(i1 == len1) {
-                return false;
-            }  
-            if(p.charAt(i2) == s.charAt(i1) || p.charAt(i2) == '.' ) {
-                return isMatch(s, p, i1 + 1, i2 + 1);
-            } else {
-                return false;
-            }
-        } else {
-            // *
-            // case 1: match empty string:
-            if(isMatch(s, p, i1, i2 + 2)){
-                return true;
-            } 
-            
-            int i = i1;
-            while(i < len1 && (p.charAt(i2) == s.charAt(i) || p.charAt(i2) == '.')) {
-                if(isMatch(s, p, i + 1, i2 + 2)){
-                    return true;
+        dp[0][0] = true;
+        for(int j = 1; j <= lenP; j++) {
+            char charP = p.charAt(j-1);
+            if(charP == '*') {
+                if(j == 1 || dp[0][j-2]) {
+                    dp[0][j] = true;
                 }
-                i++;
+            } else {
+                dp[0][j] = false;
             }
-            return false;
         }
+        
+        for(int i = 1; i <= lenS; i++) {
+            for(int j = 1; j <= lenP; j++) {
+                char charP = p.charAt(j-1);
+                char charS = s.charAt(i-1);
+                if(charP == '*') {
+                    if(dp[i][j-1]) { // '*' here is used as matching one preceding element
+                        dp[i][j] = true;
+                    } else if(dp[i][j-2]) { // "*" here is used as matching no preceding element
+                        dp[i][j] = true;
+                    } else if(dp[i-1][j]) {
+                        char prevP = p.charAt(j-2);
+                        if(charS == prevP) { // e.g. "aa", "a*"
+                            dp[i][j] = true;
+                        } else if(prevP == '.') {  // e.g. "aa", ".*"
+                            dp[i][j] = true;
+                        }
+                    }
+                } else {
+                    if(dp[i-1][j-1]) { // when s.substring(0, i-1) matches p.substring(0, j-1)
+                        if(charP == '.' || charP == charS) {
+                            dp[i][j] = true;
+                        }
+                    }
+                }
+            }
+        }
+        return dp[lenS][lenP];
     }
 }
-
-/*
-Submission Result: Wrong Answer More Details 
-
-Input:
-"aaa"
-"ab*a*c*a"
-Output:
-false
-Expected:
-true
-
-Input:
-"a"
-"ab*"
-Output:
-false
-Expected:
-true
-*/
