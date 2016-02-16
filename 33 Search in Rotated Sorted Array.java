@@ -7,20 +7,16 @@ public class Solution {
         while(lo <= hi) {
             int mid = lo + (hi - lo)/2;
             if(nums[mid] < nums[hi]) {
-                if(nums[mid] < target && nums[hi] > target) {
+                if(nums[mid] < target && nums[hi] >= target) {
                     lo = mid + 1;
                 } else if(nums[mid] == target) {
                     return mid;
-                } else if(nums[hi] == target) {
-                    return hi;
                 } else {
                     hi = mid - 1;
                 }
             } else {
-                if(nums[lo] < target && nums[mid] > target) {
+                if(nums[lo] <= target && nums[mid] > target) {
                     hi = mid - 1;
-                } else if(nums[lo] == target) {
-                    return lo;
                 } else if(nums[mid] == target) {
                     return mid;
                 } else {
