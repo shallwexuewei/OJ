@@ -1,26 +1,33 @@
 public class Solution {
     public int lengthOfLIS(int[] nums) {
-        int len = nums.length;
-        int maxLen = 0;
-        for(int i = 0; i < len; i++) {
-            int subLen = 1;
-            int prev = nums[i];
-            int prevPrev = nums[i];
-            for(int j = i + 1; j < len; j++) {
-                if(nums[j] > prev) {
-                    subLen++;
-                    prevPrev = prev;
-                    prev = nums[j];
-                } else {
-                    if(nums[j] > prevPrev) {
-                        prev = nums[j];
-                    }
-                }
-            }
-            if(subLen > maxLen) {
-                maxLen = subLen;
+        if(nums == null)    return 0;
+        
+        int size = nums.length;
+        if(size < 2)        return size;
+        
+        int[] sub = new int[size];
+        int last = 0;
+        sub[0] = nums[0];
+        for(int i = 1; i < nums.length; i++) {
+            if(nums[i] > sub[last]) {
+                sub[++last] = nums[i];
+            } else {
+                int ceilIndex = getCeilIndex(sub, 0, last, nums[i]);
+                sub[ceilIndex] = nums[i];
             }
         }
-        return maxLen;
+        return last + 1;
+    }
+    
+    private int getCeilIndex(int[] sub, int lo, int hi, int target) {
+        while(lo < hi) {
+            int mid = lo + (hi - lo)/2;
+            if(sub[mid] >= target) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        return lo;
     }
 }
