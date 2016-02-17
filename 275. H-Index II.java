@@ -1,14 +1,20 @@
 public class Solution {
     public int hIndex(int[] citations) {
         int len = citations.length;
-        if(len == 0)    return 0;
         
-        int cnt = len;
-        for(int i = 0; i < len; i++, cnt--) {
-            if(citations[i] >= cnt) {
-                return cnt;
+        int lo = 0;
+        int hi = len - 1;
+        while(lo <= hi) {
+            int mid = lo + (hi - lo)/2;
+            int num = len - mid;
+            if(citations[mid] > num) {
+                hi = mid - 1;
+            } else if(citations[mid] < num) {
+                lo = mid + 1;
+            } else {
+                return num;
             }
         }
-        return 0;
+        return (len - lo);
     }
 }
