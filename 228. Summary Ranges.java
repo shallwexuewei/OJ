@@ -5,21 +5,16 @@ public class Solution {
             return result;
         }
         int lower = nums[0];
-        int upper = nums[0];
-        int prev = nums[0];
         int i = 1;
         while(i < nums.length) {
-            if(nums[i] == prev + 1) {
-                upper = nums[i];
+            if(nums[i] == nums[i-1] + 1) {
             } else {
-                result.add(getStr(lower, upper));
+                result.add(getStr(lower, nums[i-1]));
                 lower = nums[i];
-                upper = nums[i];
             }
-            prev = nums[i];
             i++;
         }
-        result.add(getStr(lower, upper));
+        result.add(getStr(lower, nums[i-1]));
         return result;
     }
     
