@@ -8,35 +8,22 @@ public class Solution {
             return result;
         }
         
-        ArrayList<StringBuilder> builders = new ArrayList<StringBuilder>();
-        for(int i = 0; i < digits.length(); i++) {
-            int digit = digits.charAt(i) - '0';
-            if(digit < 2 || digit > 9) {
-                // throw
-                return result;
-            }
-            
-            char[] chars = num2chars[digit];
-            ArrayList<StringBuilder> newBuilders = new ArrayList<StringBuilder>();
-            for(int j = 0; j < chars.length; j++) {
-                for(StringBuilder builder:builders) {
-                    StringBuilder newBuilder = new StringBuilder(builder);
-                    newBuilder.append(chars[j]);
-                    newBuilders.add(newBuilder);
-                }
-                if(builders.isEmpty()){
-                    StringBuilder newBuilder = new StringBuilder();
-                    newBuilder.append(chars[j]);
-                    newBuilders.add(newBuilder);
-                }
-            }
-            builders = newBuilders;
-        }
-        
-        for(StringBuilder builder:builders) {
-            result.add(builder.toString());
-        }
+        dfs(digits, 0, new StringBuilder(), result);
         return result;
     }
     
+    private void dfs(String digits, int depth, StringBuilder builder, List<String> result) {
+        if(depth == digits.length()){
+            result.add(builder.toString());
+            return;
+        }
+        
+        int digit = digits.charAt(depth) - '0';
+        char[] chars = num2chars[digit];
+        for(int j = 0; j < chars.length; j++) {
+            builder.append(chars[j]);
+            dfs(digits, depth + 1, builder, result);
+            builder.setLength(builder.length() - 1);
+        }
+    }
 }
