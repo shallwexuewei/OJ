@@ -1,36 +1,25 @@
 public class Solution {
     public List<String> generateParenthesis(int n) {
         List<String> result = new ArrayList<String>();
-        if(n < 1)   return result;
-        
-        generateParenthesis(new StringBuilder(2*n), 0, 2*n, result);
+        generateParenthesis(new StringBuilder(), n, 0, result);
         return result;
     }
     
-    private void generateParenthesis(StringBuilder builder, int numLeft, int rest, List<String> result) {
-        if(rest == 0) {
-            result.add(builder.toString());
-            return;
-        }
-        if(numLeft == rest) {
-            for(int i = 0; i < rest; i++) {
-                builder.append(')');
-            }
+    private void generateParenthesis(StringBuilder builder, int leftLeft, int rightLeft, List<String> result) {
+        if(leftLeft == 0 && rightLeft == 0)   {
             result.add(builder.toString());
             return;
         }
         
-        int len = builder.length();
-        if(numLeft < rest) {
+        if(leftLeft > 0) {
             builder.append('(');
-            generateParenthesis(builder, numLeft + 1, rest - 1, result);
-        }
-        builder.setLength(len);
-        if(numLeft > 0) {
+            generateParenthesis(builder, leftLeft - 1, rightLeft + 1, result);
+            builder.setLength(builder.length() - 1);
+        } 
+        if(rightLeft > 0) {
             builder.append(')');
-            generateParenthesis(builder, numLeft - 1, rest - 1, result);
+            generateParenthesis(builder, leftLeft, rightLeft - 1, result);
+            builder.setLength(builder.length() - 1);
         }
-        
-        builder.setLength(len);
     }
 }
