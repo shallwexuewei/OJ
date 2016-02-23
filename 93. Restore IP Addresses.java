@@ -5,6 +5,11 @@ public class Solution {
         return res;
     }
     
+    // determine if the part of ip is valid or not
+    // len:
+    //  1: true
+    //  2: first one cannot be 0
+    //  3: should be less than 255 and the first character cannot be 0
     private boolean valid(String s) {
         int len = s.length();
         if(len > 3) {
@@ -31,6 +36,7 @@ public class Solution {
     }
     
     private void getIP(String s, int i, List<String> res, int depth, String prefix){
+        // has divided the string to 4 parts, now to check whether to add it into result
         if(depth == 3) {
             if(i >= s.length() || s.length() - i > 3){
                 return;
@@ -42,6 +48,7 @@ public class Solution {
             return;
         }
         
+        // the next part of ip can be of 1 digit to 3 digits
         for(int j = i + 1; j < i + 4 && j < s.length(); j++) { 
             String sub = s.substring(i, j);
             if(valid(sub)) { 
