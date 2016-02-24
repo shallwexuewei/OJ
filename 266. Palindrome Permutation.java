@@ -1,26 +1,18 @@
 public class Solution {
     public boolean canPermutePalindrome(String s) {
-        int len = s.length();
-        if(len < 1) {
-            return false;
-        }
-        
-        int[] counts = new int[256]; // extended ASII
+        boolean[] odd = new boolean[256];
         int oddNum = 0;
-        for(int i = 0; i < len; i++) {
-            char c = s.charAt(i);
-            counts[c]++;
-            if(counts[c] % 2 == 0) {
+        for(int i = 0; i < s.length(); i++) {
+            int charIdx = s.charAt(i);
+            if(odd[charIdx]) {
                 oddNum--;
+                odd[charIdx] = false;
             } else {
                 oddNum++;
+                odd[charIdx] = true;
             }
         }
         
-        if(oddNum <= 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return oddNum < 2;
     }
 }
