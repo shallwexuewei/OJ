@@ -1,29 +1,32 @@
 public class Solution {
     public List<String> generateAbbreviations(String word) {
-        List<String> res = new ArrayList<String>(); 
-        dfs(word, 0, "", 0, res);
-        return res;
+        List<String> result = new ArrayList<String>();
+        if(word == null)  return result;
+        
+        generateAbbreviations(word, result, 0, 0, "");
+        return result;
     }
     
-    private void dfs(String word, int depth, String prefix, int count, List<String> res) {
-        int len = word.length();
-        // base case 
-        if(depth == len) {
-            if(count > 0) {
-                prefix += count;
+    private void generateAbbreviations(String word, List<String> result, int idx, int num, String prefix) {
+        // base case
+        if(idx == word.length()){
+            if(num != 0) {
+                prefix += num;
             }
-            res.add(prefix);
-            return;
+            result.add(prefix);
+            return ;
         }
         
-        // abbreviate
-        dfs(word, depth+1, prefix, count + 1, res);
+        // 2 branches: 1. char 2. int
+        // int
+        generateAbbreviations(word, result, idx+1, num+1, prefix);
         
-        // remain
-        if(count > 0) {
-            prefix += count;
+        // char
+        if(num != 0) {
+            prefix += num;
+            num = 0;
         }
-        dfs(word, depth+1, prefix + word.charAt(depth), 0, res);
+        generateAbbreviations(word, result, idx+1, num, prefix+word.charAt(idx));
         
     }
 }
