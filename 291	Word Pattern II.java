@@ -1,59 +1,51 @@
 public class Solution {
-    public boolean wordPatternMatch(String pattern, String str) { 
-        HashMap<Character, String> map = new HashMap<Character, String>();
-        HashSet<String> words = new HashSet<String>();
-        return match(pattern, str, 0, 0, map, words);
-        
-    }
-    
-    private boolean match(String pattern, String str, int pi, int si, HashMap<Character, String> map, HashSet<String> words) {
-        if(pi == pattern.length()) {
-            return si == str.length();
-        } else if(si == str.length()) {
+    public boolean wordPatternMatch(String pattern, String str) {
+        if(pattern == null || str == null) {
             return false;
         }
         
-        char c = pattern.charAt(pi);
-        if(map.containsKey(c)) {
-            String word = map.get(c);
-            for(int i = 0; i < word.length(); i++) {
-                // dont forget si + i < str.length()
-                if(si + i < str.length() && str.charAt(si + i) != word.charAt(i)) {
-                    return false;
-                }
-            }
-            return match(pattern, str, pi + 1, si + word.length(), map, words);
-        } else {
-            // new c
-            for(int i = si + 1; i <= str.length(); i++ ) {
-                String word = str.substring(si, i);
-                // one word cannot be mapped to different pattern.
-                if(words.contains(word)) {
+        String[] char2word = new String[26];
+        HashSet<String> wordSet = new HashSet<String>();
+        
+        return dfs(pattern, str, char2word, wordSet, 0, 0);
+    }
+    
+    private boolean dfs(String pattern, String str, String[] char2word, HashSet<String> wordSet, int strIdx, int patternIdx) {
+        if(pattern.length() == patternIdx) {
+            System.out.println(str.length() + ", " + strIdx);
+            return str.length() == strIdx;
+        }
+        int charIdx = pattern.charAt(patternIdx) - 'a';
+        int restLen = pattern.length() - patternIdx - 1;
+        if(char2word[charIdx] == null) {
+            for(int end = strIdx+1; end <= str.length() - restLen; end++) {
+                String subStr = str.substring(strIdx, end);
+                //System.out.println(subStr);
+                if(wordSet.contains(subStr)) {
                     continue;
                 }
-                map.put(c, word);
-                words.add(word);
-                if(match(pattern, str, pi + 1, i, map, words)) {
+                char2word[charIdx] = subStr;
+                wordSet.add(subStr);
+                if(dfs(pattern, str, char2word, wordSet, end, patternIdx + 1)) {
                     return true;
                 }
-                map.remove(c);
-                words.remove(word);
+                wordSet.remove(subStr);
+                char2word[charIdx] = null;
             }
             return false;
+        } else {
+            String word = char2word[charIdx];
+            int end = strIdx + word.length();
+            if(end > str.length()) {
+                return false;
+            }
+            String subStr = str.substring(strIdx, end);
+            if(word.equals(subStr)) {
+                //System.out.println(strIdx + ", " + end + ", " + word + ", " + subStr);
+                return dfs(pattern, str, char2word, wordSet, end, patternIdx+1);
+            } else {
+                return false;
+            }
         }
     }
 }
-
-/*
- Wrong Answer More Details 
-
-Input:
-"ab"
-"aa"
-Output:
-true
-Expected:
-false
-
-From the above test case, we know that one word cannot be mapped to different pattern.
-*/
