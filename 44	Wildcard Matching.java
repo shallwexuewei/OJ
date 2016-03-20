@@ -1,30 +1,37 @@
 public class Solution {
     public boolean isMatch(String s, String p) {
-        int lenS = s.length();
-        int lenP = p.length();
+        if(s == null || p == null)  return false;
         
-        boolean[][] dp = new boolean[lenS + 1][lenP + 1];
-        dp[0][0] = true;
+        int sLen = s.length();
+        int pLen = p.length();
         
-        for(int j = 1; j <= lenP; j++) {
-            if(p.charAt(j-1) == '*')    dp[0][j] = dp[0][j-1];
-            else                        break;
-        }
-        
-        for(int i = 1; i <= lenS; i++) {
-            for(int j = 1; j <= lenP; j++) {
-                char charS = s.charAt(i-1);
-                char charP = p.charAt(j-1);
-                if(charP == '*') {
-                    dp[i][j] = dp[i-1][j] || dp[i][j-1];
-                }
-                if(dp[i-1][j-1]) {
-                    if(charS == charP || charP == '?') {
-                        dp[i][j] = true;
-                    }
-                }
+        int sIdx = 0;
+        int pIdx = 0;
+        int pStar = -1;
+        int sStar = -1;
+        while(sIdx < sLen) {
+            if(pIdx < pLen && p.charAt(pIdx) == '*' ) {
+                pStar = pIdx;
+                sStar = sIdx;
+                pIdx++; // match empty string
+            }
+            else if(pIdx < pLen && (p.charAt(pIdx) == s.charAt(sIdx) || p.charAt(pIdx) == '?')) {
+                pIdx++;
+                sIdx++;
+            } 
+            else if(sStar > -1) {
+                sStar++;
+                sIdx = sStar;
+                pIdx = pStar + 1;
+            }
+            else {
+                return false;
             }
         }
-        return dp[lenS][lenP];
+        
+        while(pIdx < pLen && p.charAt(pIdx) == '*') {
+            pIdx++;
+        }
+        return pIdx == pLen;
     }
 }
