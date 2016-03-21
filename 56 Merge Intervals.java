@@ -9,38 +9,38 @@
  */
 public class Solution {
     public List<Interval> merge(List<Interval> intervals) {
-        // if(intervals == null)
-        int len = intervals.size();
-        List<Interval> result = new LinkedList<Interval>();
-        if(len == 0) {
-            return result;
+        
+        if(intervals == null || intervals.size() == 0) {
+            return intervals;
         }
         
-        Comparator<Interval> comparator = new Comparator<Interval>(){
+        int size = intervals.size();
+        List<Interval> result = new ArrayList<Interval>(size);
+        
+        PriorityQueue<Interval> q = new PriorityQueue<Interval>(size, new Comparator<Interval>() {
             @Override
             public int compare(Interval a, Interval b) {
                 return a.start - b.start;
             }
-        };
+        });
         
-        Collections.sort(intervals, comparator);
+        for(Interval i:intervals) {
+            q.offer(i);
+        }
         
-        int i = 1;
-        Interval current = new Interval(intervals.get(0).start, intervals.get(0).end);
-        while(i < len) {
-            Interval next = intervals.get(i);
-            if(current.end >= next.start){
-                if( current.end < next.end) {
-                    current.end = next.end;
+        Interval prev = q.poll();
+        while(q.isEmpty() == false) { 
+            Interval current = q.poll();
+            if(prev.end >= current.start) {
+                if(current.end > prev.end) {
+                    prev.end = current.end;
                 }
             } else {
-                result.add(current);
-                current = new Interval(next.start, next.end);
+                result.add(prev);
+                prev = current;
             }
-            i++;
         }
-        result.add(current);
-        
+        result.add(prev);
         return result;
     }
 }
